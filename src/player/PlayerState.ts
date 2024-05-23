@@ -1,27 +1,21 @@
 export enum PlayerState{
 // Normal
     Jump,
-    Stand,
-    Fall,
     ShootUp,
     ShootDown,
-    Left,
-    Right,
+    Fall,
 
 // Wearing Jetpack
-    JetpackFly,
-    JetpackShootUp,
-    JetpackShootDown,
-    JetpackLeft,
-    JetpackRight,
+    WearingJetpack,
 
 // Wearing Pinwheel,
-    PinwheelFly,
-    PinwheelShootUp,
-    PinwheelShootDown,
-    PinwheelLeft,
-    PinwheelRight,
+    WearingPropeller,
 
 // HitMonster
-    HitMonster
+    HitMonster,
+};
+
+export enum Direction{
+    Left,
+    Right,
 }
