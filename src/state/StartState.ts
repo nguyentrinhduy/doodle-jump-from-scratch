@@ -7,9 +7,11 @@ import { NormalLand } from "../land/NormalLand";
 import { Player } from "../player/Player";
 import { PlayerState } from "../player/PlayerState";
 import { FlyweightFactory } from "../resourceFactory/FlyweightFactory";
-import { BackgroundFlyweight, MainMenuFlyweight, PlayButtonFlyweight } from "../resourceFactory/ResourcePath";
+import { BackgroundFlyweight, MainMenuFlyweight, PlayButtonFlyweight } from "../constants/ResourcePath";
 import { PlayingState } from "./PlayingState";
 import { State } from "./State"
+import { BACKGROUND_POSITION, LAND_POSITION_IN_START_STATE, PLAY_BUTTON_POSITION } from "../constants/FixedPosition";
+import { PLAYER_START_POSITION_IN_START_STATE } from "../constants/Player";
 
 export class StartState extends State {
     private background: View;
@@ -22,24 +24,23 @@ export class StartState extends State {
         this.loadResources();
         canvas.addEventListener('click', this.handleMouseClick)
     }
-    private loadResources(){
+    private async loadResources(){
         // load Background
         console.log("getFlyweight");
         // load Player
         this.player = GameManager.getInstance().getPlayer();
-        this.player.setPositionX(100)
+        this.player.setPosition([...PLAYER_START_POSITION_IN_START_STATE]);
         this.background = new View(MainMenuFlyweight);
         this.background.setHeight(window.innerHeight);
-        this.background.setPosition([0, 0]);
+        this.background.setPosition([...BACKGROUND_POSITION]);
 
         // load PlayButton
         this.playButton = new Button(PlayButtonFlyweight);
-        this.playButton.setPosition([70, 500]);
+        this.playButton.setPosition([...PLAY_BUTTON_POSITION]);
 
         // load ScoresButton
         this.land = new NormalLand();
-        this.land.setPosition([120, 580]);
-        this.land.scaleSize(1.5);
+        this.land.setPosition([...LAND_POSITION_IN_START_STATE]);
         // load Options
     }
 
@@ -52,11 +53,12 @@ export class StartState extends State {
             GameManager.getInstance().reset();
             this.context.transitionTo(new PlayingState());
             canvas.removeEventListener('click', this.handleMouseClick);
+            
         }
     }
     update(period: number){
         this.player.autoFall(period);
-        if (this.player.collides(this.land)){
+        if (this.player.standOn(this.land)){
             if (this.player.getState() == PlayerState.Fall){
                 this.land.onJumped(this.player);
             }

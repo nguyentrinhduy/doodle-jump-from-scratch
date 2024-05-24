@@ -2,9 +2,10 @@ import { GameManager } from "../GameManager";
 import { canvas } from "../MainGame";
 import { Button } from "../button/Button";
 import { View } from "../gameEngine/View";
-import { PauseBackgroundFlyweight, ResumeButtonFlyweight, TopPlayingFlyweight } from "../resourceFactory/ResourcePath";
+import { PauseBackgroundFlyweight, ResumeButtonFlyweight, TopPlayingFlyweight } from "../constants/ResourcePath";
 import { PlayingState } from "./PlayingState";
 import { State } from "./State";
+import { BACKGROUND_POSITION, PAUSE_BUTTON_POSITION, RESUME_BUTTON_POSITION, TOP_BACKGROUND_POSITION } from "../constants/FixedPosition";
 
 export class PauseState extends State{
     resumeButton: Button;
@@ -18,16 +19,16 @@ export class PauseState extends State{
     loadResources(){
         // load background
         this.background = new View(PauseBackgroundFlyweight);
-        this.background.setPosition([0, 0]);
+        this.background.setPosition([...BACKGROUND_POSITION]);
 
         // load topBackground
         this.topBackground = new View(TopPlayingFlyweight);
-        this.topBackground.setPosition([0, 0]);
+        this.topBackground.setPosition([...TOP_BACKGROUND_POSITION]);
 
         // load resume button
         this.resumeButton = new Button(ResumeButtonFlyweight);
         this.resumeButton.scaleSize(1.2);
-        this.resumeButton.setPosition([this.background.getPositionX() + this.background.getWidth() - 60,10]);
+        this.resumeButton.setPosition([...RESUME_BUTTON_POSITION]);
     }
     handleMouseClick = (event: MouseEvent) => {
         const rect = canvas.getBoundingClientRect();
