@@ -1,5 +1,6 @@
 import { GameManager } from "./GameManager";
 import { Service } from "./gameEngine/Service";
+import { FlyweightFactory } from "./resourceFactory/FlyweightFactory";
 import { StartState } from "./state/StartState";
 import { State } from "./state/State";
 
@@ -8,6 +9,7 @@ export class MainGame {
     state: State
     constructor(){
         this.gameManager = GameManager.getInstance();
+        FlyweightFactory.getInstance();
     }
     run()
     {
@@ -33,8 +35,10 @@ function loop() {
 export const canvas = document.getElementById('game') as HTMLCanvasElement;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+console.log(canvas.width);
+console.log(canvas.height);
 
-let newGame = new MainGame()
+let newGame = new MainGame();
 let lastTime = window.performance.now();
 
 // run the game
