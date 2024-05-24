@@ -14,7 +14,9 @@ export class View{
         this.flyweight = FlyweightFactory.getInstance().getFlyweight(state);
         this.size = this.flyweight.getNaturalSize();
     }
-    
+    loadImage(): Promise<void>{
+        return this.flyweight.loadImage();
+    }
     protected setFlyweight(state: string[]){
         this.flyweight = FlyweightFactory.getInstance().getFlyweight(state);
     }
@@ -78,11 +80,8 @@ export class View{
     }
     standOn(other: View): boolean{
         return (
-            (this.position[1] + this.size[1] == other.position[1]) && 
-            (
-                (other.position[0] <= this.position[0] && this.position[0] <= other.position[0] + other.size[0]) ||
-                (other.position[0] <= this.position[0] + this.size[0] && this.position[0] + this.size[0] <= other.position[0] + other.size[0])
-            )
+            other.containsPoint([this.position[0], this.position[1] + this.size[1]])||
+            other.containsPoint([this.position[0] + this.size[0], this.position[1] + this.size[1]])
         );
     }
 }

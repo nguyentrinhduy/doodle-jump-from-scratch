@@ -25,6 +25,7 @@ export class Animator{
             }
         }
     }
+    
     display(position: [number, number], vector: [number, number]){
         this.flyweights[this.currentAnimation].display(position, vector);
     }

@@ -22,4 +22,8 @@ export class Service{
         const maxFloored = Math.floor(max);
         return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
     }
+
+    getRandomFloat(min: number, max: number){
+        return (Math.random()*(max - min) + min);
+    }
 }

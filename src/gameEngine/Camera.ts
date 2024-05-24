@@ -1,6 +1,4 @@
-// default
-export const WINDOW_WIDTH = 1000;
-export const WINDOW_HEIGHT = 1000;
+
 export class Camera{
     private offset: [number, number]; // locate at the left top
     private size: [number, number];
@@ -8,12 +6,16 @@ export class Camera{
     private static instance: Camera;
     private constructor(){
         this.offset = [400, 0];
+        this.vector = [0, 0];
     }
     static getInstance(){
         if (!Camera.instance){
             Camera.instance = new Camera();
         }
         return Camera.instance;
+    }
+    getVector(){
+        return this.vector;
     }
     getOffsetX(){
         return this.offset[0];
