@@ -57,6 +57,7 @@ export class Player extends ImageView{
         this.buffTime -= progress;
         if (this.buffTime <= 0){
             this.buffTime = 0;
+            this.buff = null;
             this.setState(PlayerState.Jump);
             this.acceleration = [...GRAVITY_ACCELERATION];
         }
@@ -105,6 +106,9 @@ export class Player extends ImageView{
     setBuffTime(time: number){
         this.buffTime = time;
     }
+    setBuff(buff: Buff){
+        this.buff = buff;
+    }
     setState(state: PlayerState, direction = this.direction){
         this.state = state;
         this.direction = direction;
@@ -125,6 +129,14 @@ export class Player extends ImageView{
                     this.setFlyweight(PlayerJumpRightFlyweight);
                 break;
             }
+            case PlayerState.WearingJetpack:
+            {
+                
+            }
+            case PlayerState.WearingPropeller:
+            {
+
+            }
             default:
             {
                 break;
@@ -144,6 +156,12 @@ export class Player extends ImageView{
             if (this.state == PlayerState.Jump){
                 this.setState(PlayerState.Fall);
             }
+        }
+    }
+    override display(): void {
+        super.display();
+        if (this.buff){
+            this.buff.display();
         }
     }
 }
