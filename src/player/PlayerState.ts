@@ -11,8 +11,8 @@ export enum PlayerState{
 // Wearing Pinwheel,
     WearingPropeller,
 
-// HitMonster
-    HitMonster,
+// Lose
+    Lose,
 };
 
 export enum Direction{
