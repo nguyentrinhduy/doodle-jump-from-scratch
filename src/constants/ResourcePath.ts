@@ -49,6 +49,9 @@ export const ResumeButtonFlyweight = ["Buttons", "resume"];
 // Normal land
 export const NormalLandFlyweight = ["Lands", "normal_land"];
 
+// Moving land
+export const MovingLandFlyweight = ["Lands", "moving_land"];
+
 // Propeller buff
 export const PropellerBuffFlyweight = [];
 
@@ -57,3 +60,6 @@ export const JetpackBuffFlyweight = [];
 
 // Spring buff
 export const SpringBuffFlyweight = [];
+
+// Bullet 
+export const BulletFlyweight = [];
