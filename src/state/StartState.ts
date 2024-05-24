@@ -1,6 +1,6 @@
 import { GameManager } from "../GameManager";
 import { canvas } from "../MainGame"
-import { Button } from "../button/Button";
+import { Button } from "../gameEngine/Button";
 import { Camera } from "../gameEngine/Camera";
 import { View } from "../gameEngine/View";
 import { NormalLand } from "../land/NormalLand";
@@ -12,9 +12,11 @@ import { PlayingState } from "./PlayingState";
 import { State } from "./State"
 import { BACKGROUND_POSITION, LAND_POSITION_IN_START_STATE, PLAY_BUTTON_POSITION } from "../constants/FixedPosition";
 import { PLAYER_START_POSITION_IN_START_STATE } from "../constants/Player";
+import { WINDOW_HEIGHT } from "../constants/WindowBounds";
+import { ImageView } from "../gameEngine/ImageView";
 
 export class StartState extends State {
-    private background: View;
+    private background: ImageView;
     private playButton: Button;
     private player: Player;
     private scoreButton: Button;
@@ -30,8 +32,8 @@ export class StartState extends State {
         // load Player
         this.player = GameManager.getInstance().getPlayer();
         this.player.setPosition([...PLAYER_START_POSITION_IN_START_STATE]);
-        this.background = new View(MainMenuFlyweight);
-        this.background.setHeight(window.innerHeight);
+        this.background = new ImageView(MainMenuFlyweight);
+        this.background.setHeight(WINDOW_HEIGHT);
         this.background.setPosition([...BACKGROUND_POSITION]);
 
         // load PlayButton
@@ -57,7 +59,7 @@ export class StartState extends State {
         }
     }
     update(period: number){
-        this.player.autoFall(period);
+        this.player.autoFallInStartState(period);
         if (this.player.standOn(this.land)){
             if (this.player.getState() == PlayerState.Fall){
                 this.land.onJumped(this.player);

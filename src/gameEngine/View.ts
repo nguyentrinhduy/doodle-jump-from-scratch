@@ -3,23 +3,9 @@ import { FlyweightFactory } from "../resourceFactory/FlyweightFactory";
 import { Animator } from "./Animator";
 import { Camera } from "./Camera";
 
-export class View{
-    protected flyweight: Flyweight;
-    protected animator: Animator;
+export abstract class View{
     protected size: [number, number]; // [width, height]
     protected position: [number, number]; // left top position of the rectangle
-
-    
-    constructor(state: string[]){
-        this.flyweight = FlyweightFactory.getInstance().getFlyweight(state);
-        this.size = this.flyweight.getNaturalSize();
-    }
-    loadImage(): Promise<void>{
-        return this.flyweight.loadImage();
-    }
-    protected setFlyweight(state: string[]){
-        this.flyweight = FlyweightFactory.getInstance().getFlyweight(state);
-    }
     setSize(size: [number, number]){
         this.size = size;
     }
@@ -60,10 +46,6 @@ export class View{
     getPositionY(){
         return this.position[1];
     }
-    display(){
-        // console.log("getFlyweight");
-        this.flyweight.display(Camera.getInstance().getNewPosition(this.position), this.size);
-    }
     containsPoint(point: [number, number]){
         return (
             (this.position[0] <= point[0] && point[0] <= this.position[0] + this.size[0]) &&
@@ -84,4 +66,5 @@ export class View{
             other.containsPoint([this.position[0] + this.size[0], this.position[1] + this.size[1]])
         );
     }
+    abstract display(): void;
 }

@@ -1,3 +1,4 @@
+import { AnimationView } from "../gameEngine/AnimationView";
 import { View } from "../gameEngine/View";
 import { Player } from "../player/Player";
 
@@ -7,7 +8,7 @@ export enum BuffType{
     Jetpack = 2,
     Spring = 3,
 }
-export abstract class Buff extends View {
+export abstract class Buff extends AnimationView {
     constructor(state: string[]){
         super(state);
     }

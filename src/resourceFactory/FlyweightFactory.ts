@@ -1,7 +1,7 @@
 // import { canvas } from "../MainGame";
 import { Flyweight } from "./Flyweight";
 import 
-{ BackgroundFlyweight, JetpackBuffFlyweight, MainMenuFlyweight, NormalLandFlyweight, OptionsButtonFlyweight, PauseBackgroundFlyweight, PauseButtonFlyweight, PlayAgainButtonFlyweight, PlayAgainHoverButtonFlyweight, PlayButtonFlyweight, PlayHoverButtonFlyweight, PlayerFallLeftFlyweight, PlayerFallRightFlyweight, PlayerJumpLeftFlyweight, PlayerJumpRightFlyweight, PlayerShootFlyweight, PropellerBuffFlyweight, ResumeButtonFlyweight, SpringBuffFlyweight, TopPlayingFlyweight } from "../constants/ResourcePath";
+{ BackgroundFlyweight, JetpackBuffFlyweight, MainMenuFlyweight, MovingLandFlyweight, NormalLandFlyweight, OptionsButtonFlyweight, PauseBackgroundFlyweight, PauseButtonFlyweight, PlayAgainButtonFlyweight, PlayAgainHoverButtonFlyweight, PlayButtonFlyweight, PlayHoverButtonFlyweight, PlayerFallLeftFlyweight, PlayerFallRightFlyweight, PlayerJumpLeftFlyweight, PlayerJumpRightFlyweight, PlayerShootFlyweight, PropellerBuffFlyweight, ResumeButtonFlyweight, SpringBuffFlyweight, TopPlayingFlyweight } from "../constants/ResourcePath";
 import { JetpackBuff } from "../buff/JetpackBuff";
 
 const INITIAL_FLYWEIGHTS =
@@ -23,6 +23,7 @@ const INITIAL_FLYWEIGHTS =
     PlayAgainButtonFlyweight,
     ResumeButtonFlyweight,
     NormalLandFlyweight,
+    MovingLandFlyweight,
     // PropellerBuffFlyweight,
     // JetpackBuffFlyweight,
     // SpringBuffFlyweight

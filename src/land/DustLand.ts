@@ -7,7 +7,7 @@ export class DustLand extends Land{
         super(["Land", "Dust"]);
     }
     onJumped(player: Player): void {
-        
+        // this.requestMultipleAnimation(1, 5);
     }
     move(): void {
         let cameraVector = Camera.getInstance().getVector();

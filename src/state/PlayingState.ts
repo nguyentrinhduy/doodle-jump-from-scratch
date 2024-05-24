@@ -1,6 +1,6 @@
 import { GameManager } from "../GameManager";
 import { canvas } from "../MainGame";
-import { Button } from "../button/Button";
+import { Button } from "../gameEngine/Button";
 import { View } from "../gameEngine/View";
 import { Player } from "../player/Player";
 import { BackgroundFlyweight, PauseButtonFlyweight, TopPlayingFlyweight } from "../constants/ResourcePath";
@@ -12,15 +12,18 @@ import { EndState } from "./EndState";
 import { Land } from "../land/Land";
 import { Monster } from "../monster/Monster";
 import { PLAYER_START_POSITION } from "../constants/Player";
+import { ImageView } from "../gameEngine/ImageView";
+import { Bullet } from "../player/Bullet";
 
 export class PlayingState extends State{
     gameManager: GameManager;
-    background: View;
-    topBackground: View;
+    background: ImageView;
+    topBackground: ImageView;
     pauseButton: Button;
     player: Player;
     lands: Land[];
     monsters: Monster[];
+    bullets: Bullet[];
     constructor(){
         super();
         this.gameManager = GameManager.getInstance();
@@ -29,27 +32,30 @@ export class PlayingState extends State{
         window.addEventListener('keydown', this.handleArrowKeysPressed);
         window.addEventListener('keyup', this.handleArrowKeysReleased);
     }
-    private async loadResources(){
+    private loadResources(){
         // load player
         this.player = this.gameManager.getPlayer();
 
         // load lands
         this.lands = this.gameManager.getLands();
+        
+        // load monsters
+        this.monsters = this.gameManager.getMonsters();
 
+        // load bullets
+        this.bullets = this.gameManager.getBullets();
         // load background
-        this.background = new View(BackgroundFlyweight);
+        this.background = new ImageView(BackgroundFlyweight);
         this.background.setPosition([...BACKGROUND_POSITION]);
 
         // load top background
-        this.topBackground = new View(TopPlayingFlyweight);
+        this.topBackground = new ImageView(TopPlayingFlyweight);
         this.topBackground.setPosition([...TOP_BACKGROUND_POSITION]);
 
         // load pause button
         this.pauseButton = new Button(PauseButtonFlyweight);
         this.pauseButton.scaleSize(1.5);
         this.pauseButton.setPosition([...PAUSE_BUTTON_POSITION]);
-        
-        
     }
     private handleMouseClick = (event: MouseEvent) => {
         const rect = canvas.getBoundingClientRect();

@@ -1,16 +1,17 @@
 import { GameManager } from "../GameManager";
 import { canvas } from "../MainGame";
-import { Button } from "../button/Button";
+import { Button } from "../gameEngine/Button";
 import { View } from "../gameEngine/View";
 import { PauseBackgroundFlyweight, ResumeButtonFlyweight, TopPlayingFlyweight } from "../constants/ResourcePath";
 import { PlayingState } from "./PlayingState";
 import { State } from "./State";
 import { BACKGROUND_POSITION, PAUSE_BUTTON_POSITION, RESUME_BUTTON_POSITION, TOP_BACKGROUND_POSITION } from "../constants/FixedPosition";
+import { ImageView } from "../gameEngine/ImageView";
 
 export class PauseState extends State{
     resumeButton: Button;
-    background: View;
-    topBackground: View;
+    background: ImageView;
+    topBackground: ImageView;
     constructor(){
         super();
         this.loadResources();
@@ -18,11 +19,11 @@ export class PauseState extends State{
     }
     loadResources(){
         // load background
-        this.background = new View(PauseBackgroundFlyweight);
+        this.background = new ImageView(PauseBackgroundFlyweight);
         this.background.setPosition([...BACKGROUND_POSITION]);
 
         // load topBackground
-        this.topBackground = new View(TopPlayingFlyweight);
+        this.topBackground = new ImageView(TopPlayingFlyweight);
         this.topBackground.setPosition([...TOP_BACKGROUND_POSITION]);
 
         // load resume button

@@ -26,4 +26,11 @@ export class Service{
     getRandomFloat(min: number, max: number){
         return (Math.random()*(max - min) + min);
     }
+
+    loadData(filePath: string){
+
+    }
+    saveData(filePath: string){
+
+    }
 }

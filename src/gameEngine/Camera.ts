@@ -3,6 +3,7 @@ export class Camera{
     private offset: [number, number]; // locate at the left top
     private size: [number, number];
     private vector: [number, number];
+    private timePassed: number;
     private static instance: Camera;
     private constructor(){
         this.offset = [400, 0];
@@ -22,6 +23,12 @@ export class Camera{
     }
     getOffsetY(){
         return this.offset[1];
+    }
+    setTimePassed(time: number){
+        this.timePassed = time;
+    }
+    getTimePassed(){
+        return this.timePassed;
     }
     getNewPosition(position: [number, number]): [number, number]{
         return [position[0] + this.offset[0], position[1] + this.offset[1]];
