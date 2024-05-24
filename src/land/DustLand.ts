@@ -1,3 +1,4 @@
+import { Camera } from "../gameEngine/Camera";
 import { Player } from "../player/Player";
 import { Land } from "./Land";
 
@@ -7,5 +8,10 @@ export class DustLand extends Land{
     }
     onJumped(player: Player): void {
         
+    }
+    move(): void {
+        let cameraVector = Camera.getInstance().getVector();
+        this.position[0] += cameraVector[0];
+        this.position[1] += cameraVector[1];
     }
 }
