@@ -1,7 +1,6 @@
 import { SpriteFactory } from "../resource-factory/SpriteFactory";
 import { ISceneContext } from "../scene-handler/ISceneContext";
 import { Scene } from "../scene-handler/Scene";
-import { GameManager } from "./GameManager";
 
 
 export class MainGame implements ISceneContext{

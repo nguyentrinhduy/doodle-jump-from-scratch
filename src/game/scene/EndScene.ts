@@ -1,4 +1,4 @@
-import { BACKGROUND_POSITION, BOTTOM_BACKGROUND_POSITION, GAME_OVER_POSITION, MENU_BUTTON_POSITION, PLAY_AGAIN_BUTTON_POSITION, SCORE_POSITION, TOP_BACKGROUND_POSITION, YOUR_HIGH_SCORE_POSITION, YOUR_NAME_POSITION } from '../constants/FixedPosition'
+import { BACKGROUND_POSITION, BOTTOM_BACKGROUND_POSITION, GAME_OVER_POSITION, MENU_BUTTON_POSITION, PLAY_AGAIN_BUTTON_POSITION, SCORE_POSITION, TOP_BACKGROUND_POSITION, YOUR_HIGH_SCORE_POSITION, YOUR_NAME_POSITION, YOUR_SCORE_POSITION } from '../constants/FixedPosition'
 import { BackgroundSprite, BottomBackgroundSprite, GameOverSprite, MenuButtonSprite, PlayAgainButtonSprite, TopBackgroundSprite } from '../constants/ResourcePath'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { GameObject } from '../../game-engine/game-objects/GameObject'
@@ -6,6 +6,9 @@ import { Scene } from '../../game-engine/scene-handler/Scene'
 import { TextGameObject } from '../../game-engine/game-objects/TextGameObject'
 import { DataManager } from '../DataManager'
 import { Button } from '../../game-engine/game-objects/Button'
+import { StartScene } from './StartScene'
+import { PlayingScene } from './PlayingScene'
+import { YOUR_HIGH_SCORE_SIZE, YOUR_NAME_SIZE, YOUR_SCORE_SIZE } from '../constants/Bounds'
 
 export class EndScene extends Scene {
     private background: ImageGameObject
@@ -24,6 +27,10 @@ export class EndScene extends Scene {
         super()
         this.dataManager = DataManager.getInstance()
         this.loadResources()
+
+        // TODO: replace these lines of code with the input handler
+        const canvas = document.getElementById('game') as HTMLCanvasElement
+        canvas.addEventListener('click', this.handleMouseClick)
     }
     private loadResources() {
         // load background
@@ -45,18 +52,24 @@ export class EndScene extends Scene {
         // load score
         this.score = this.dataManager.getScore()
 
+        // load name
+        this.playerName = this.dataManager.getPlayerName()
+
         // load your score object
-        this.yourScoreObject = new TextGameObject() 
-        this.yourScoreObject.setPosition([...SCORE_POSITION])
+        this.yourScoreObject = new TextGameObject("YOUR SCORE: " + this.score.toString()) 
+        this.yourScoreObject.setPosition([...YOUR_SCORE_POSITION])
+        this.yourScoreObject.setHeight(YOUR_SCORE_SIZE)
 
         // load your high score object
 
-        this.yourHighScoreObject = new TextGameObject()
+        this.yourHighScoreObject = new TextGameObject("YOUR HIGH SCORE: " + "0")
         this.yourHighScoreObject.setPosition([...YOUR_HIGH_SCORE_POSITION])
+        this.yourHighScoreObject.setHeight(YOUR_HIGH_SCORE_SIZE)
 
         // load your name object
-        this.yourNameObject = new TextGameObject()
+        this.yourNameObject = new TextGameObject("YOUR NAME: " + this.playerName)
         this.yourNameObject.setPosition([...YOUR_NAME_POSITION])
+        this.yourNameObject.setHeight(YOUR_NAME_SIZE)
 
         // load play again button
         this.playAgainButton = new Button(PlayAgainButtonSprite)
@@ -67,6 +80,22 @@ export class EndScene extends Scene {
         this.menuButton.setPosition([...MENU_BUTTON_POSITION])
     }
 
+    private handleMouseClick = (event: MouseEvent) => {
+        const canvas = document.getElementById('game') as HTMLCanvasElement
+        const rect = canvas.getBoundingClientRect()
+        const mouseX = event.clientX - rect.left
+        const mouseY = event.clientY - rect.top
+
+        if (this.menuButton.isClicked(mouseX, mouseY)) {
+            this.context.transitionTo(new StartScene())
+            canvas.removeEventListener('click', this.handleMouseClick)
+        }
+        else if (this.playAgainButton.isClicked(mouseX, mouseY)) {
+            this.dataManager.reset()
+            this.context.transitionTo(new PlayingScene())
+            canvas.removeEventListener('click', this.handleMouseClick)
+        }
+    }
     processInput(): void {}
 
     update(deltaTime: number): void {}
@@ -75,11 +104,11 @@ export class EndScene extends Scene {
         this.background.display()
         this.topBackground.display()
         this.bottomBackground.display()
-        this.gameOverBackground.display()
+        this.gameOverBackground.display();
+        this.playAgainButton.display()
+        this.menuButton.display()
         this.yourScoreObject.display()
         this.yourHighScoreObject.display()
         this.yourNameObject.display()
-        this.playAgainButton.display()
-        this.menuButton.display()
     }
 }

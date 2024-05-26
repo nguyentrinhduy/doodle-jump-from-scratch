@@ -4,7 +4,7 @@ import { Player } from '../player/Player'
 import { PlayerState } from '../player/PlayerState'
 
 export abstract class Monster extends AnimationGameObject {
-    protected velocity: [number, number]
+    protected abstract velocity: [number, number]
     constructor(Scene: string[]) {
         super(Scene)
     }

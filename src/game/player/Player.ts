@@ -14,7 +14,7 @@ import {
     PLAYER_START_VELOCITY,
     PLAYER_VELOCITY_DIRECTION,
 } from '../constants/Player'
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/WindowBounds'
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
 import { Camera } from '../../game-engine/camera/Camera'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Buff } from '../buff/Buff'
@@ -38,16 +38,40 @@ export class Player extends ImageGameObject {
         this.physicsHandler = new PhysicsHandler(this)
         this.physicsHandler.setVelocity([...PLAYER_START_VELOCITY])
     }
-    private resolveBuffPosition() {}
+    private resolveBuffPosition() {
+        if (!this.buff) return
+        if (this.state == PlayerState.WearingPropeller) {
+            this.buff.setPosition([this.position[0] + 15, this.position[1]])
+        } else if (this.state == PlayerState.WearingJetpack) {
+            if (this.direction == Direction.Left) {
+                this.buff.setPosition([this.position[0] + this.size[0] - 30, this.position[1] + 20])
+            } else {
+                this.buff.setPosition([
+                    this.position[0] - this.buff.getWidth() + 30,
+                    this.position[1] + 20,
+                ])
+            }
+        }
+    }
 
     autoFall(deltaTime: number) {
         this.physicsHandler.update(deltaTime)
+        if (this.position[0] + this.size[0] <= 0) {
+            this.position[0] = WINDOW_WIDTH
+        } else if (this.position[0] >= WINDOW_WIDTH) {
+            this.position[0] = -this.size[0]
+        }
         if (this.buffTime > 0) {
             this.buffTime -= deltaTime
-            this.buffTime = 0
-            this.buff = null
-            this.setState(PlayerState.Jump)
-            this.physicsHandler.setEnable(true)
+            if (this.buffTime <= 0) {
+                this.buffTime = 0
+                this.buff = null
+                this.setState(PlayerState.Jump)
+                this.physicsHandler.setEnable(true)
+            } else {
+                this.buff!.timePassed(deltaTime)
+                this.resolveBuffPosition()
+            }
         }
         if (this.physicsHandler.getVelocityY() >= 0) {
             if (this.state == PlayerState.Jump) {
@@ -57,6 +81,7 @@ export class Player extends ImageGameObject {
     }
     setVelocityDirection(direction: Direction) {
         this.direction = direction
+        this.setState(this.state)
         switch (direction) {
             case Direction.Left: {
                 this.physicsHandler.setVelocityX(-PLAYER_VELOCITY_DIRECTION)
@@ -71,49 +96,55 @@ export class Player extends ImageGameObject {
     setVelocity(velocity: [number, number]) {
         this.physicsHandler.setVelocity(velocity)
     }
+
     setVelocityX(x: number) {
         this.physicsHandler.setVelocityX(x)
     }
+
     setVelocityY(y: number) {
         this.physicsHandler.setVelocityY(y)
     }
+
     applyGravity(isAppliedPhysics: boolean) {
         this.physicsHandler.setEnable(isAppliedPhysics)
     }
+
     getVelocity() {
         return this.physicsHandler.getVelocity()
     }
+
     getState() {
         return this.state
     }
+
     update(deltaTime: number) {
         this.autoFall(deltaTime)
     }
+
     setBuffTime(time: number) {
         this.buffTime = time
     }
+
     setBuff(buff: Buff) {
         this.buff = buff
     }
+
+    getBuff() {
+        return this.buff
+    }
+
     setState(state: PlayerState, direction = this.direction) {
         this.state = state
         this.direction = direction
         switch (this.state) {
-            case PlayerState.Fall: {
-                if (direction == Direction.Right) this.setSprite(PlayerFallRightSprite)
-                else this.setSprite(PlayerFallLeftSprite)
-                break
-            }
             case PlayerState.Jump: {
                 if (direction == Direction.Left) this.setSprite(PlayerJumpLeftSprite)
                 else this.setSprite(PlayerJumpRightSprite)
                 break
             }
-            case PlayerState.WearingJetpack: {
-            }
-            case PlayerState.WearingPropeller: {
-            }
             default: {
+                if (direction == Direction.Right) this.setSprite(PlayerFallRightSprite)
+                else this.setSprite(PlayerFallLeftSprite)
                 break
             }
         }

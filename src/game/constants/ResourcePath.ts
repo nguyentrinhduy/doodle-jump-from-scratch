@@ -55,6 +55,9 @@ export const NormalLandSprite = ['Lands', 'normal_land']
 // Moving land
 export const MovingLandSprite = ['Lands', 'moving_land']
 
+// dust land
+export const DustLandSprite = ['Lands', 'dust_land']
+
 // Propeller buff
 export const PropellerBuffSprite = ["Buff", "propeller_buff"]
 

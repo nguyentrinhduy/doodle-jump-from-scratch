@@ -45,10 +45,11 @@ export class PhysicsHandler {
     }
 
     update(deltaTime: number) {
-        if (!this.isAppliedPhysics || !this.AppliedObject) return
+        if (!this.AppliedObject) return
         let newPosition = this.AppliedObject.getPosition()
         newPosition[0] += this.velocity[0] * deltaTime
         newPosition[1] += this.velocity[1] * deltaTime
+        if (!this.isAppliedPhysics) return
         this.velocity[0] += this.gravity_acceleration[0] * deltaTime
         this.velocity[1] += this.gravity_acceleration[1] * deltaTime
     }

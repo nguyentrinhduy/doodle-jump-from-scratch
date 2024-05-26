@@ -1,4 +1,4 @@
-import { WINDOW_HEIGHT } from './WindowBounds'
+import { WINDOW_HEIGHT } from './Bounds'
 
 export const PLAYER_START_VELOCITY: readonly [number, number] = [0, -100]
 export const PLAYER_START_POSITION: readonly [number, number] = [70, WINDOW_HEIGHT + 10]
