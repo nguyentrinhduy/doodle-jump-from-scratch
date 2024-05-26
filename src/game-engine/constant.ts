@@ -1,0 +1,1 @@
+export const TIME_DIFFERENCE_ANIMATION = 30
