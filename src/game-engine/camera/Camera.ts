@@ -1,4 +1,4 @@
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../game/constants/WindowBounds'
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../game/constants/Bounds'
 import { GameObject } from '../game-objects/GameObject'
 
 export class Camera {

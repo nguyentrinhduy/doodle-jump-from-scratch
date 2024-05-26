@@ -15,7 +15,7 @@ import {
     PLAY_BUTTON_POSITION,
 } from '../constants/FixedPosition'
 import { PLAYER_START_POSITION_IN_START_SCENE } from '../constants/Player'
-import { WINDOW_HEIGHT } from '../constants/WindowBounds'
+import { WINDOW_HEIGHT } from '../constants/Bounds'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { ISceneContext } from '../../game-engine/scene-handler/ISceneContext'
 
@@ -60,6 +60,7 @@ export class StartScene extends Scene {
         const mouseY = event.clientY - rect.top
 
         if (this.playButton.isClicked(mouseX, mouseY)) {
+            DataManager.getInstance().reset()
             this.context.transitionTo(new PlayingScene())
             this.canvas.removeEventListener('click', this.handleMouseClick)
         }
