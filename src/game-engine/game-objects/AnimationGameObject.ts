@@ -15,6 +15,7 @@ export class AnimationGameObject extends GameObject {
             .getInstance()
             .getAnimationSprite(spritesName)
         )
+        this.size = this.animator.getNaturalSize()
     }
     requestLoopAnimation() {
         this.animator.setRangeAnimation(null)

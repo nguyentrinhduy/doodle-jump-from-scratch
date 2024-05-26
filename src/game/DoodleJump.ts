@@ -1,7 +1,8 @@
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants/WindowBounds'
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from './constants/Bounds'
 import { MainGame } from '../game-engine/main-game/MainGame'
 import { SpriteFactory } from '../game-engine/resource-factory/SpriteFactory'
 import { StartScene } from './scene/StartScene'
+import { EndScene } from './scene/EndScene'
 
 class DoodleJump extends MainGame {
     constructor() {

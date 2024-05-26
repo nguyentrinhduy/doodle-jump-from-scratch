@@ -1,5 +1,5 @@
 import { Camera } from '../game-engine/camera/Camera'
-import { TOP_BOUND } from './constants/WindowBounds'
+import { TOP_BOUND } from './constants/Bounds'
 import { ILand, Land, LandType } from './land/ILand'
 import { Monster } from './monster/Monster'
 import { Bullet } from './player/Bullet'
@@ -59,5 +59,13 @@ export class DataManager {
 
     getScore() {
         return this.score
+    }
+
+    getPlayerName() {
+        return this.playerName
+    }
+
+    setScore(score: number) {
+        this.score = score
     }
 }

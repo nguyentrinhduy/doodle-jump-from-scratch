@@ -10,6 +10,9 @@ export class Animator {
     constructor(sprites: Sprite[]) {
         this.range = null
         this.sprites = sprites
+        this.currentAnimation = 0
+        this.timeDifference = 0
+        this.animationTimeLeft = 0
     }
     setTimeDifference(time: number) {
         this.timeDifference = time
@@ -37,7 +40,7 @@ export class Animator {
         }
     }
     getNaturalSize() {
-        return this.sprites[0].getNaturalSize()
+        return this.sprites[this.currentAnimation].getNaturalSize()
     }
     display(position: [number, number], velocity: [number, number]) {
         this.sprites[this.currentAnimation].display(position, velocity)

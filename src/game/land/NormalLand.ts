@@ -28,7 +28,7 @@ export class NormalLand extends ImageGameObject implements ILand {
     }
     randomizeBuff() {
         let service = MathHandler.getInstance()
-        let randomNum = service.getRandomInt(0, 3)
+        let randomNum = service.getRandomInt(0, 4)
         switch (randomNum) {
             case BuffType.Propeller: {
                 this.buff = new PropellerBuff()
@@ -60,4 +60,10 @@ export class NormalLand extends ImageGameObject implements ILand {
         }
     }
     move(deltaTime: number): void {}
+    override display(cameraOffset?: [number, number]): void {
+        super.display(cameraOffset)
+        if (this.buff){
+            this.buff.display(cameraOffset)
+        }
+    }
 }
