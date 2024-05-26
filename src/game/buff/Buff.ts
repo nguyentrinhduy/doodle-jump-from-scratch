@@ -12,6 +12,7 @@ export enum BuffType {
 export abstract class Buff extends AnimationGameObject {
     constructor(Scene: string[]) {
         super(Scene)
+        this.scaleSize(2)
         this.requestSingleAnimation(0)
     }
     abstract onReceived(player: Player): void

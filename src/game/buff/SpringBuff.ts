@@ -7,6 +7,7 @@ import { Buff } from './Buff'
 export class SpringBuff extends Buff {
     constructor() {
         super(SpringBuffSprite)
+        this.requestSingleAnimation(0)
     }
     onReceived(player: Player): void {
         player.setState(PlayerState.Jump)
