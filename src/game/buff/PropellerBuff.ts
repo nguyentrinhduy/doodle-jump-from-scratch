@@ -8,7 +8,6 @@ import { Buff } from './Buff'
 export class PropellerBuff extends Buff {
     constructor() {
         super(PropellerBuffSprite)
-        this.requestSingleAnimation(0)
     }
     onReceived(player: Player): void {
         player.setVelocity([...PLAYER_VELOCITY_ON_PROPELLER_BUFF])
