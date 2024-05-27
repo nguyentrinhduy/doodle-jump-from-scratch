@@ -6,9 +6,10 @@ import { SpriteFactory } from '../resource-factory/SpriteFactory'
 
 export class AnimationGameObject extends GameObject {
     private animator: Animator
-
+    private spritesName: string[]
     constructor(spritesName: string[]) {
         super()
+        this.spritesName = [...spritesName]
         this.animator = new Animator(SpriteFactory.getInstance().getAnimationSprite(spritesName))
         this.size = this.animator.getNaturalSize()
     }
@@ -38,4 +39,11 @@ export class AnimationGameObject extends GameObject {
             this.size
         )
     }
+    cloneAnimator() {
+        return this.animator.clone()
+    }
+    setAnimator(animator: Animator) {
+        this.animator = animator
+    }
+
 }

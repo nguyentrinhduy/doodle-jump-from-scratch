@@ -45,4 +45,18 @@ export class Animator {
     display(position: [number, number], velocity: [number, number]) {
         this.sprites[this.currentAnimation].display(position, velocity)
     }
+    clone() {
+        let newAnimator = new Animator(this.sprites)
+        newAnimator.currentAnimation = this.currentAnimation
+        newAnimator.timeDifference = this.timeDifference
+        newAnimator.animationTimeLeft = this.animationTimeLeft
+        newAnimator.timeDisplay = this.timeDisplay
+        if (this.range) {
+            newAnimator.range = [...this.range]
+        }
+        else {
+            newAnimator.range = null
+        }
+        return newAnimator
+    }
 }

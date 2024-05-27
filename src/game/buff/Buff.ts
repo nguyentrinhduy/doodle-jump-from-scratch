@@ -14,5 +14,6 @@ export abstract class Buff extends AnimationGameObject {
         this.requestSingleAnimation(0)
         this.scaleSize(2)
     }
+    abstract clone(): Buff
     abstract onReceived(player: Player): void
 }
