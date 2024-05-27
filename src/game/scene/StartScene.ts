@@ -29,12 +29,9 @@ export class StartScene extends Scene {
     constructor() {
         super()
         this.loadResources()
-        this.canvas = document.getElementById('game') as HTMLCanvasElement
-        this.canvas.addEventListener('click', this.handleMouseClick)
     }
     private loadResources() {
         // load Background
-
         this.background = new ImageGameObject(MainMenuSprite)
         this.background.setHeight(WINDOW_HEIGHT)
         this.background.setPosition([...BACKGROUND_POSITION])
@@ -50,21 +47,14 @@ export class StartScene extends Scene {
         // load Land
         this.land = new NormalLand()
         this.land.setPosition([...LAND_POSITION_IN_START_SCENE])
-        // load Options
     }
 
-    private handleMouseClick = (event: MouseEvent) => {
-        const rect = this.canvas.getBoundingClientRect()
-        const mouseX = event.clientX - rect.left
-        const mouseY = event.clientY - rect.top
-
-        if (this.playButton.isClicked(mouseX, mouseY)) {
+    processInput(): void {
+        if (this.mouseInput.clicked(this.playButton)) {
             DataManager.getInstance().reset()
             this.context.transitionTo(new PlayingScene())
-            this.canvas.removeEventListener('click', this.handleMouseClick)
         }
     }
-    processInput(): void {}
 
     update(deltaTime: number): void {
         this.player.autoFallInStartScene(deltaTime)
@@ -76,10 +66,11 @@ export class StartScene extends Scene {
     }
 
     render(): void {
-        const ctx = this.canvas.getContext('2d')
+        const canvas = document.getElementById('game') as HTMLCanvasElement
+        const ctx = canvas!.getContext('2d')
         if (ctx) {
             // clear the whole canvas first
-            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
 
             // draw Background
             this.background.display()

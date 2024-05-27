@@ -44,12 +44,6 @@ export class PlayingScene extends Scene {
         super()
         this.dataManager = DataManager.getInstance()
         this.loadResources()
-
-        // TODO: replace these lines of codes with input handler in game engine
-        const canvas = document.getElementById('game') as HTMLCanvasElement
-        canvas.addEventListener('click', this.handleMouseClick)
-        window.addEventListener('keydown', this.handleArrowKeysPressed)
-        window.addEventListener('keyup', this.handleArrowKeysReleased)
     }
     private loadResources() {
         // load player
@@ -85,65 +79,6 @@ export class PlayingScene extends Scene {
         this.scoreObject.setPosition([0, 50])
         this.scoreObject.setHeight(SCORE_PLAYING_SCENE_SIZE)
     }
-    private handleMouseClick = (event: MouseEvent) => {
-        const canvas = document.getElementById('game') as HTMLCanvasElement
-        const rect = canvas.getBoundingClientRect()
-        const mouseX = event.clientX - rect.left
-        const mouseY = event.clientY - rect.top
-
-        if (this.pauseButton.isClicked(mouseX, mouseY)) {
-            this.context.transitionTo(new PauseScene())
-            canvas.removeEventListener('click', this.handleMouseClick)
-        }
-    }
-    private handleArrowKeysReleased = (event: KeyboardEvent) => {
-        switch (event.key) {
-            case 'w':
-            case 'ArrowUp':
-                break
-            case 's':
-            case 'ArrowDown':
-                break
-            case 'a':
-            case 'ArrowLeft':
-                break
-            case 'd':
-            case 'ArrowRight':
-                // Stop moving when arrow keys are released
-                this.player.setVelocity([0, this.player.getVelocity()[1]])
-                break
-            default:
-                // Handle other keys if necessary
-                break
-        }
-    }
-    private handleArrowKeysPressed = (event: KeyboardEvent) => {
-        switch (event.key) {
-            case 'w':
-            case 'ArrowUp':
-                // Handle up arrow key
-
-                break
-            case 's':
-            case 'ArrowDown':
-                // Handle down arrow key
-
-                break
-            case 'a':
-            case 'ArrowLeft':
-                // Handle left arrow key
-                this.player.setVelocityDirection(Direction.Left)
-                break
-            case 'd':
-            case 'ArrowRight':
-                // Handle right arrow key
-                this.player.setVelocityDirection(Direction.Right)
-                break
-            default:
-                // Handle other keys
-                break
-        }
-    }
 
     render() {
         const canvas = document.getElementById('game') as HTMLCanvasElement
@@ -176,10 +111,6 @@ export class PlayingScene extends Scene {
         ) {
             this.dataManager.setScore(this.score)
             this.context.transitionTo(new EndScene())
-            const canvas = document.getElementById('game') as HTMLCanvasElement
-            canvas.removeEventListener('click', this.handleMouseClick)
-            window.removeEventListener('keydown', this.handleArrowKeysPressed)
-            window.removeEventListener('keyup', this.handleArrowKeysReleased)
             return
         }
         // console.log(this.player.velocity[1]);
@@ -305,5 +236,45 @@ export class PlayingScene extends Scene {
         })
     }
 
-    processInput(): void {}
+    processInput(): void {
+        this.mouseInputProcessing()
+        this.keyboardInputProcessing()
+    }
+
+    private mouseInputProcessing() {
+        if (this.mouseInput.clicked(this.pauseButton)) {
+            this.dataManager.setScore(this.score)
+            this.context.transitionTo(new PauseScene())
+        }
+    }
+
+    private keyboardInputProcessing() {
+        // key down
+        // press a or press arrow left
+        if (this.keyboardInput.pressed('a') || this.keyboardInput.pressed('ArrowLeft')) {
+            this.player.setVelocityDirection(Direction.Left)
+        }
+        // press d or press arrow right
+        else if (this.keyboardInput.pressed('d') || this.keyboardInput.pressed('ArrowRight')) {
+            this.player.setVelocityDirection(Direction.Right)
+        }
+        // press w or press arrow up
+        else if (this.keyboardInput.pressed('w') || this.keyboardInput.pressed('ArrowUp')) {
+
+        }
+
+        // key up
+        // release a or release arrow left
+        if (this.keyboardInput.released('a') || this.keyboardInput.released('ArrowLeft')) {
+            this.player.setVelocityX(0)
+        }
+        // release d or release arrow right
+        else if (this.keyboardInput.released('d') || this.keyboardInput.released('ArrowRight')) {
+            this.player.setVelocityX(0)
+        }
+        // release w or release arrow up
+        else if (this.keyboardInput.released('w') || this.keyboardInput.released('ArrowUp')) {
+            
+        }
+    }
 }

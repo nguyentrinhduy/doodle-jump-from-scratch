@@ -48,7 +48,6 @@ export class EndScene extends Scene {
 
         // TODO: replace these lines of code with the input handler
         const canvas = document.getElementById('game') as HTMLCanvasElement
-        canvas.addEventListener('click', this.handleMouseClick)
     }
     private loadResources() {
         // load background
@@ -98,34 +97,44 @@ export class EndScene extends Scene {
         this.menuButton.setPosition([...MENU_BUTTON_POSITION])
     }
 
-    private handleMouseClick = (event: MouseEvent) => {
-        const canvas = document.getElementById('game') as HTMLCanvasElement
-        const rect = canvas.getBoundingClientRect()
-        const mouseX = event.clientX - rect.left
-        const mouseY = event.clientY - rect.top
-
-        if (this.menuButton.isClicked(mouseX, mouseY)) {
-            this.context.transitionTo(new StartScene())
-            canvas.removeEventListener('click', this.handleMouseClick)
-        } else if (this.playAgainButton.isClicked(mouseX, mouseY)) {
+    processInput(): void {
+        if (this.mouseInput.clicked(this.playAgainButton)) {
             this.dataManager.reset()
             this.context.transitionTo(new PlayingScene())
-            canvas.removeEventListener('click', this.handleMouseClick)
+        }
+        else {
+            this.context.transitionTo(new StartScene)
         }
     }
-    processInput(): void {}
 
     update(deltaTime: number): void {}
 
     render(): void {
+        // display background
         this.background.display()
+
+        // display top background
         this.topBackground.display()
+
+        // display bottom background
         this.bottomBackground.display()
+
+        // display game over background
         this.gameOverBackground.display()
+
+        // display play again button
         this.playAgainButton.display()
+
+        // display menu button
         this.menuButton.display()
+
+        // display score object
         this.yourScoreObject.display()
+
+        // display high score object
         this.yourHighScoreObject.display()
+
+        // display name object
         this.yourNameObject.display()
     }
 }
