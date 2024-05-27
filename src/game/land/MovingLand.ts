@@ -30,7 +30,7 @@ export class MovingLand extends ImageGameObject implements ILand {
     }
     randomizeBuff() {
         let mathHandler = MathHandler.getInstance()
-        let randomNum = mathHandler.getRandomInt(0, 42)
+        let randomNum = mathHandler.getRandomInt(0, 30)
         switch (randomNum) {
             case BuffType.Propeller: {
                 this.buff = new PropellerBuff()
@@ -72,7 +72,6 @@ export class MovingLand extends ImageGameObject implements ILand {
     onJumped(player: Player): void {
         if (this.buff && player.collides(this.buff)) {
             this.buff.onReceived(player)
-            this.buff = null
         } else {
             player.setVelocity([...PLAYER_START_VELOCITY])
             player.setState(PlayerState.Jump)

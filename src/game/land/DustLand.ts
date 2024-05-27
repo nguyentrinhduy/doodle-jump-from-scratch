@@ -23,5 +23,6 @@ export class DustLand extends AnimationGameObject implements ILand {
     move(deltaTime: number): void {
         this.position[0] += this.velocity[0] * deltaTime
         this.position[1] += this.velocity[1] * deltaTime
+        this.timePassed(deltaTime)
     }
 }
