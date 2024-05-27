@@ -7,6 +7,9 @@ export abstract class GameObject {
     protected size: [number, number] // [width, height]
     protected position: [number, number] // left top position of the rectangle
     protected visible: boolean
+    constructor() {
+        this.visible = true
+    }
     setSize(size: [number, number]) {
         this.size = size
     }

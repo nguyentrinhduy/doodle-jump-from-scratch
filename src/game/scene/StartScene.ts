@@ -14,7 +14,10 @@ import {
     LAND_POSITION_IN_START_SCENE,
     PLAY_BUTTON_POSITION,
 } from '../constants/FixedPosition'
-import { PLAYER_START_POSITION_IN_START_SCENE, PLAYER_START_VELOCITY_IN_START_SCENE } from '../constants/Player'
+import {
+    PLAYER_START_POSITION_IN_START_SCENE,
+    PLAYER_START_VELOCITY_IN_START_SCENE,
+} from '../constants/Player'
 import { WINDOW_HEIGHT } from '../constants/Bounds'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { ISceneContext } from '../../game-engine/scene-handler/ISceneContext'

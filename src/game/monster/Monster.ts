@@ -10,8 +10,9 @@ export enum MonsterType {
 }
 export abstract class Monster extends AnimationGameObject {
     protected abstract velocity: [number, number]
-    constructor(Scene: string[]) {
-        super(Scene)
+    constructor(spritesName: string[]) {
+        super(spritesName)
+        this.scaleSize(1.5)
     }
     onCollision(player: Player) {
         player.setState(PlayerState.Lose)

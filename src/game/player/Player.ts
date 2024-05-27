@@ -12,6 +12,7 @@ import {
     GRAVITY_ACCELERATION,
     PLAYER_START_POSITION,
     PLAYER_START_VELOCITY,
+    PLAYER_START_VELOCITY_IN_PLAYING_SCENE,
     PLAYER_VELOCITY_DIRECTION,
 } from '../constants/Player'
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
@@ -34,7 +35,7 @@ export class Player extends ImageGameObject {
         this.buffTime = 0
         this.scaleSize(1.5)
         this.physicsHandler = new PhysicsHandler(this)
-        this.physicsHandler.setVelocity([...PLAYER_START_VELOCITY])
+        this.physicsHandler.setVelocity([...PLAYER_START_VELOCITY_IN_PLAYING_SCENE])
     }
     private resolveBuffPosition() {
         if (!this.buff) return

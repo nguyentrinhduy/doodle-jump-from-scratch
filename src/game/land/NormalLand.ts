@@ -28,7 +28,7 @@ export class NormalLand extends ImageGameObject implements ILand {
     }
     randomizeBuff() {
         let service = MathHandler.getInstance()
-        let randomNum = service.getRandomInt(0, 4)
+        let randomNum = service.getRandomInt(0, 30)
         switch (randomNum) {
             case BuffType.Propeller: {
                 this.buff = new PropellerBuff()
@@ -53,7 +53,6 @@ export class NormalLand extends ImageGameObject implements ILand {
     onJumped(player: Player): void {
         if (this.buff && player.collides(this.buff)) {
             this.buff.onReceived(player)
-            this.buff = null
         } else {
             player.setVelocity([...PLAYER_START_VELOCITY])
             player.setState(PlayerState.Jump)

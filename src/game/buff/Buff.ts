@@ -9,10 +9,10 @@ export enum BuffType {
     Spring = 3,
 }
 export abstract class Buff extends AnimationGameObject {
-    constructor(Scene: string[]) {
-        super(Scene)
-        this.scaleSize(2)
+    constructor(spritesName: string[]) {
+        super(spritesName)
         this.requestSingleAnimation(0)
+        this.scaleSize(2)
     }
     abstract clone(): Buff
     abstract onReceived(player: Player): void
