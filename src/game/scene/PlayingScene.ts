@@ -13,7 +13,7 @@ import {
 import { Direction, PlayerState } from '../player/PlayerState'
 import { EndScene } from './EndScene'
 import { ILand, Land, LandType } from '../land/ILand'
-import { Monster } from '../monster/Monster'
+import { Monster, MonsterType } from '../monster/Monster'
 import { PLAYER_START_POSITION } from '../constants/Player'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Bullet } from '../player/Bullet'
@@ -25,6 +25,7 @@ import { Camera } from '../../game-engine/camera/Camera'
 import { MathHandler } from '../../game-engine/math/MathHandler'
 import { DustLand } from '../land/DustLand'
 import { TextGameObject } from '../../game-engine/game-objects/TextGameObject'
+import { BlueWingsMonster } from '../monster/BlueWingsMonster'
 
 export class PlayingScene extends Scene {
     private dataManager: DataManager
@@ -153,12 +154,20 @@ export class PlayingScene extends Scene {
         this.lands.forEach((element) => {
             element.display(cameraOffset)
         })
+        this.player.display(cameraOffset)
+        this.monsters.forEach(element => {
+            element.display(cameraOffset)
+        });
         this.topBackground.display()
         this.pauseButton.display()
-        this.player.display(cameraOffset)
         this.scoreObject.display()
     }
     update(deltaTime: number): void {
+        this.monsters.forEach(element => {
+            if (this.player.collides(element)){
+                element.onCollision(this.player)
+            }
+        });
         if (
             (this.camera.isOutOfBottomRange(this.player) &&
                 this.player.getState() == PlayerState.Fall) ||
@@ -247,8 +256,40 @@ export class PlayingScene extends Scene {
                 }
             }
         }
+        while (
+            this.monsters.length == 0 ||
+            this.monsters[this.monsters.length - 1].getPositionY() - this.camera.getOffsetY() >= 700
+        ) {
+            let previousHeight = WINDOW_HEIGHT
+            if (this.monsters.length > 0) {
+                previousHeight = this.monsters[this.monsters.length - 1].getPositionY()
+            }
+            let randomNum = mathHandler.getRandomInt(0, 3)
+            switch (randomNum) {
+                case MonsterType.BlueWingsMonster: {
+                    let newMonster = new BlueWingsMonster()
+                    newMonster.setPosition([
+                        mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
+                        mathHandler.getRandomFloat(
+                            previousHeight - newMonster.getHeight() - 1000,
+                            previousHeight - newMonster.getHeight() - 700
+                        ),
+                    ])
+                    this.monsters.push(newMonster)
+                    break
+                }
+                default: {
+                    break
+                }
+                
+            }
+        }
         this.lands.forEach((element) => {
             element.move(deltaTime)
+        })
+        this.monsters.forEach((element) => {
+            element.move(deltaTime)
+            element.timePassed(deltaTime)
         })
     }
 

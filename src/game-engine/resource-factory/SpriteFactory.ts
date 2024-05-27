@@ -2,6 +2,7 @@
 import { Sprite } from './Sprite'
 import {
     BackgroundSprite,
+    BlueWingsMonsterSprite,
     DustLandSprite,
     GameOverSprite,
     JetpackBuffSprite,
@@ -56,6 +57,7 @@ const INITIAL_ANIMATIONS: [string[], number][] = [
     [JetpackBuffSprite, 10],
     [SpringBuffSprite, 2],
     [DustLandSprite, 4],
+    [BlueWingsMonsterSprite, 8],
 ]
 export class SpriteFactory {
     private Sprites: { [key: string]: Sprite } = <any>{}
