@@ -78,3 +78,6 @@ export const MenuButtonSprite = ["Buttons", "menu"]
 
 // Blue wing monster
 export const BlueWingsMonsterSprite = ["Monsters", "blue_wing_monster"]
+
+// Alien monster
+export const AlienMonsterSprite = ["Monsters", "alien_monster"]
