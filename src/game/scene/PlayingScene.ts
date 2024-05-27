@@ -26,6 +26,7 @@ import { MathHandler } from '../../game-engine/math/MathHandler'
 import { DustLand } from '../land/DustLand'
 import { TextGameObject } from '../../game-engine/game-objects/TextGameObject'
 import { BlueWingsMonster } from '../monster/BlueWingsMonster'
+import { AlienMonster } from '../monster/AlienMonster'
 
 export class PlayingScene extends Scene {
     private dataManager: DataManager
@@ -278,6 +279,18 @@ export class PlayingScene extends Scene {
                     this.monsters.push(newMonster)
                     break
                 }
+                case MonsterType.AlienMonster: {
+
+                }let newMonster = new AlienMonster()
+                    newMonster.setPosition([
+                        mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
+                        mathHandler.getRandomFloat(
+                            previousHeight - newMonster.getHeight() - 1000,
+                            previousHeight - newMonster.getHeight() - 700
+                        ),
+                    ])
+                    this.monsters.push(newMonster)
+                    break
                 default: {
                     break
                 }
