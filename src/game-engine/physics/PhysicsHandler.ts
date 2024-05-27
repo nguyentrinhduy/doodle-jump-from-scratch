@@ -53,4 +53,11 @@ export class PhysicsHandler {
         this.velocity[0] += this.gravity_acceleration[0] * deltaTime
         this.velocity[1] += this.gravity_acceleration[1] * deltaTime
     }
+
+    clone(object: GameObject) {
+        let newPhysicHandler = new PhysicsHandler(object)
+        newPhysicHandler.velocity = [...this.velocity]
+        newPhysicHandler.isAppliedPhysics = this.isAppliedPhysics
+        return newPhysicHandler
+    }
 }
