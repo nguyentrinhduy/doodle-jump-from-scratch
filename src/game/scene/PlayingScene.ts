@@ -80,6 +80,10 @@ export class PlayingScene extends Scene {
         this.scoreObject.setHeight(SCORE_PLAYING_SCENE_SIZE)
     }
 
+    processInput(): void {
+        this.mouseInputProcessing()
+        this.keyboardInputProcessing()
+    }
     render() {
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas.getContext('2d')
@@ -234,11 +238,6 @@ export class PlayingScene extends Scene {
             element.move(deltaTime)
             element.timePassed(deltaTime)
         })
-    }
-
-    processInput(): void {
-        this.mouseInputProcessing()
-        this.keyboardInputProcessing()
     }
 
     private mouseInputProcessing() {
