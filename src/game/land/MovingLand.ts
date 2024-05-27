@@ -57,7 +57,7 @@ export class MovingLand extends ImageGameObject implements ILand {
         if (this.buff) buffPosition = this.buff.getPosition()
         if (this.position[0] >= WINDOW_WIDTH - this.size[0]) {
             buffPosition[0] -= this.position[0] - (WINDOW_WIDTH - this.size[0])
-            this.position[0] = WINDOW_WIDTH - LAND_WIDTH
+            this.position[0] = WINDOW_WIDTH - this.size[0]
             this.velocity[0] = -this.velocity[0]
         } else if (this.position[0] <= 0) {
             buffPosition[0] -= this.position[0]
