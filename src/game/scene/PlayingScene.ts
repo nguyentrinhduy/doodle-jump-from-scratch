@@ -165,6 +165,9 @@ export class PlayingScene extends Scene {
                 this.temporaryPlayer = null
             }
         }
+        else {
+            this.temporaryPlayer = null
+        }
         if (this.temporaryPlayer) {
             this.temporaryPlayer.autoFall(deltaTime)
         }
