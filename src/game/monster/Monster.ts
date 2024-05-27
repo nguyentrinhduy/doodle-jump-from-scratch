@@ -6,7 +6,7 @@ import { PlayerState } from '../player/PlayerState'
 export enum MonsterType{
     None = 0,
     BlueWingsMonster = 1,
-    
+    AlienMonster = 2,
 }
 export abstract class Monster extends AnimationGameObject {
     protected abstract velocity: [number, number]
