@@ -40,6 +40,8 @@ export class PlayingScene extends Scene {
     private monsters: Monster[]
     private bullets: Bullet[]
     private camera: Camera
+    private bulletReloadTime: number
+    private lastStandableLandHeight: number
     constructor() {
         super()
         this.dataManager = DataManager.getInstance()
@@ -151,17 +153,22 @@ export class PlayingScene extends Scene {
                 previousHeight = this.lands[this.lands.length - 1].getPositionY()
             }
             let randomNum = mathHandler.getRandomInt(0, 3)
+            if (previousHeight - this.lastStandableLandHeight >= 30) {
+                randomNum = mathHandler.getRandomInt(0, 1)
+            }
+            
             switch (randomNum) {
                 case LandType.NormalLand: {
                     let newLand = new NormalLand()
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 200,
-                            previousHeight - LAND_HEIGHT
+                            previousHeight - LAND_HEIGHT - 40,
+                            previousHeight - LAND_HEIGHT - 20
                         ),
                     ])
                     newLand.randomizeBuff()
+                    this.lastStandableLandHeight = newLand.getPositionY()
                     this.lands.push(newLand)
                     break
                 }
@@ -170,11 +177,12 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 200,
-                            previousHeight - LAND_HEIGHT
+                            previousHeight - LAND_HEIGHT - 40,
+                            previousHeight - LAND_HEIGHT - 20
                         ),
                     ])
                     newLand.randomizeBuff()
+                    this.lastStandableLandHeight = newLand.getPositionY()
                     this.lands.push(newLand)
                     break
                 }
@@ -183,8 +191,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 200,
-                            previousHeight - LAND_HEIGHT
+                            previousHeight - LAND_HEIGHT - 40,
+                            previousHeight - LAND_HEIGHT - 20
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -194,10 +202,11 @@ export class PlayingScene extends Scene {
             }
         }
         while (
-            this.monsters.length == 0 ||
-            this.monsters[this.monsters.length - 1].getPositionY() - this.camera.getOffsetY() >= 700
+            (this.player.getState() == PlayerState.Jump || this.player.getState() == PlayerState.Fall) &&
+            (this.monsters.length == 0 ||
+            this.monsters[this.monsters.length - 1].getPositionY() - this.camera.getOffsetY() >= 700)
         ) {
-            let previousHeight = WINDOW_HEIGHT
+            let previousHeight = 0
             if (this.monsters.length > 0) {
                 previousHeight = this.monsters[this.monsters.length - 1].getPositionY()
             }
@@ -208,8 +217,8 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 1000,
-                            previousHeight - newMonster.getHeight() - 700
+                            previousHeight - newMonster.getHeight() - 2000,
+                            previousHeight - newMonster.getHeight() - 1500
                         ),
                     ])
                     this.monsters.push(newMonster)
@@ -220,8 +229,8 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 1000,
-                            previousHeight - newMonster.getHeight() - 700
+                            previousHeight - newMonster.getHeight() - 2000,
+                            previousHeight - newMonster.getHeight() - 1500
                         ),
                     ])
                     this.monsters.push(newMonster)
