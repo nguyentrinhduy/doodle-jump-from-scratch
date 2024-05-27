@@ -12,6 +12,6 @@ export class SpringBuff extends Buff {
     onReceived(player: Player): void {
         player.setState(PlayerState.Jump)
         player.setVelocity([...PLAYER_VELOCITY_ON_SPRING_BUFF])
-        this.requestSingleAnimation(1);
+        this.requestSingleAnimation(1)
     }
 }

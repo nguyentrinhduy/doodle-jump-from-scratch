@@ -14,11 +14,10 @@ export abstract class Scene {
     setContext(context: ISceneContext) {
         this.context = context
     }
-    
+
     abstract update(deltaTime: number): void
 
     abstract render(): void
 
     abstract processInput(): void
-    
 }

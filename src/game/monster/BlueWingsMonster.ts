@@ -1,10 +1,10 @@
-import { WINDOW_WIDTH } from "../constants/Bounds";
-import { BLUE_WINGS_MONSTER_INITIAL_VELOCITY } from "../constants/Monsters";
-import { BlueWingsMonsterSprite } from "../constants/ResourcePath";
-import { Monster } from "./Monster";
+import { WINDOW_WIDTH } from '../constants/Bounds'
+import { BLUE_WINGS_MONSTER_INITIAL_VELOCITY } from '../constants/Monsters'
+import { BlueWingsMonsterSprite } from '../constants/ResourcePath'
+import { Monster } from './Monster'
 
 export class BlueWingsMonster extends Monster {
-    protected velocity: [number, number];
+    protected velocity: [number, number]
     constructor() {
         super(BlueWingsMonsterSprite)
         this.velocity = [...BLUE_WINGS_MONSTER_INITIAL_VELOCITY]

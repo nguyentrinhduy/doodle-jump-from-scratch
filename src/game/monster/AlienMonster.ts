@@ -1,10 +1,10 @@
-import { WINDOW_WIDTH } from "../constants/Bounds";
-import { ALIEN_MONSTER_INITIAL_VELOCITY } from "../constants/Monsters";
-import { AlienMonsterSprite } from "../constants/ResourcePath";
-import { Monster } from "./Monster";
+import { WINDOW_WIDTH } from '../constants/Bounds'
+import { ALIEN_MONSTER_INITIAL_VELOCITY } from '../constants/Monsters'
+import { AlienMonsterSprite } from '../constants/ResourcePath'
+import { Monster } from './Monster'
 
 export class AlienMonster extends Monster {
-    protected velocity: [number, number];
+    protected velocity: [number, number]
     constructor() {
         super(AlienMonsterSprite)
         this.requestSingleAnimation(0)

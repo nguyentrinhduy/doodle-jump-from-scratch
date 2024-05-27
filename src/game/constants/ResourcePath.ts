@@ -59,25 +59,25 @@ export const MovingLandSprite = ['Lands', 'moving_land']
 export const DustLandSprite = ['Lands', 'dust_land']
 
 // Propeller buff
-export const PropellerBuffSprite = ["Buff", "propeller_buff"]
+export const PropellerBuffSprite = ['Buff', 'propeller_buff']
 
 // Jetpack buff
-export const JetpackBuffSprite = ["Buff", "jetpack_buff"]
+export const JetpackBuffSprite = ['Buff', 'jetpack_buff']
 
 // Spring buff
-export const SpringBuffSprite = ["Buff", "spring_buff"]
+export const SpringBuffSprite = ['Buff', 'spring_buff']
 
 // Bullet
-export const BulletSprite = ["Bullet", "bullet"]
+export const BulletSprite = ['Bullet', 'bullet']
 
 // Game over
-export const GameOverSprite = ["Components", "game_over"]
+export const GameOverSprite = ['Components', 'game_over']
 
 // menu button
-export const MenuButtonSprite = ["Buttons", "menu"]
+export const MenuButtonSprite = ['Buttons', 'menu']
 
 // Blue wing monster
-export const BlueWingsMonsterSprite = ["Monsters", "blue_wing_monster"]
+export const BlueWingsMonsterSprite = ['Monsters', 'blue_wing_monster']
 
 // Alien monster
-export const AlienMonsterSprite = ["Monsters", "alien_monster"]
+export const AlienMonsterSprite = ['Monsters', 'alien_monster']

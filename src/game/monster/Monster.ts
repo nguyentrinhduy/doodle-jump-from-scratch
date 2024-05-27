@@ -3,7 +3,7 @@ import { GameObject } from '../../game-engine/game-objects/GameObject'
 import { Player } from '../player/Player'
 import { PlayerState } from '../player/PlayerState'
 
-export enum MonsterType{
+export enum MonsterType {
     None = 0,
     BlueWingsMonster = 1,
     AlienMonster = 2,
