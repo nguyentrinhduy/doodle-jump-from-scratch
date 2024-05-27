@@ -21,12 +21,10 @@ import { Buff } from '../buff/Buff'
 import { PhysicsHandler } from '../../game-engine/physics/PhysicsHandler'
 
 export class Player extends ImageGameObject {
-    private score: number
     private state: PlayerState
     private direction: Direction
     private buffTime: number
     private buff: Buff | null
-    private camera: Camera
     private physicsHandler: PhysicsHandler
     constructor() {
         super(PlayerJumpLeftSprite)
@@ -56,11 +54,6 @@ export class Player extends ImageGameObject {
 
     autoFall(deltaTime: number) {
         this.physicsHandler.update(deltaTime)
-        if (this.position[0] + this.size[0] <= 0) {
-            this.position[0] = WINDOW_WIDTH
-        } else if (this.position[0] >= WINDOW_WIDTH) {
-            this.position[0] = -this.size[0]
-        }
         if (this.buffTime > 0) {
             this.buffTime -= deltaTime
             if (this.buffTime <= 0) {
@@ -169,5 +162,24 @@ export class Player extends ImageGameObject {
         if (this.buff) {
             this.buff.display(cameraOffset)
         }
+    }
+
+    clone(): Player {
+        let player = new Player()
+        player.position = [...this.position]
+        player.size = [...this.size]
+        player.visible = this.visible
+        player.state = this.state
+        player.direction = this.direction
+        player.physicsHandler = this.physicsHandler.clone(player)
+        player.buffTime = this.buffTime
+        player.sprite = this.sprite
+        if (this.buff) {
+            player.buff = this.buff.clone()
+        }
+        else {
+            player.buff = null
+        }
+        return player
     }
 }

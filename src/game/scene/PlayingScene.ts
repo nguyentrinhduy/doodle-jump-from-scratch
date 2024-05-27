@@ -40,12 +40,16 @@ export class PlayingScene extends Scene {
     private monsters: Monster[]
     private bullets: Bullet[]
     private camera: Camera
+    private temporaryPlayer: Player | null
     constructor() {
         super()
         this.dataManager = DataManager.getInstance()
         this.loadResources()
     }
     private loadResources() {
+        // set null for temporary player
+        this.temporaryPlayer = null
+
         // load player
         this.player = this.dataManager.getPlayer()
 
@@ -91,6 +95,9 @@ export class PlayingScene extends Scene {
             element.display(cameraOffset)
         })
         this.player.display(cameraOffset)
+        if (this.temporaryPlayer) {
+            this.temporaryPlayer.display(cameraOffset)
+        }
         this.monsters.forEach((element) => {
             element.display(cameraOffset)
         })
@@ -124,6 +131,35 @@ export class PlayingScene extends Scene {
         this.score = Math.round(
             Math.max(this.score, PLAYER_START_POSITION[1] - this.player.getPositionY())
         )
+        if (this.player.getPositionX() < 0){
+            if (this.player.getPositionX() + this.player.getWidth() > 0) {
+                if (!this.temporaryPlayer) {
+                    this.temporaryPlayer = this.player.clone()
+                    this.temporaryPlayer.setPositionX(this.player.getPositionX() + WINDOW_WIDTH)
+                }
+            }
+            else {
+                this.player = this.temporaryPlayer!
+                this.camera.focusOn(this.player)
+                this.temporaryPlayer = null
+            }
+        }
+        else if (this.player.getPositionX() + this.player.getWidth() > WINDOW_WIDTH){
+            if (this.player.getPositionX() < WINDOW_WIDTH) {
+                if (!this.temporaryPlayer) {
+                    this.temporaryPlayer = this.player.clone()
+                    this.temporaryPlayer.setPositionX(this.player.getPositionX() - WINDOW_WIDTH)
+                }
+            }
+            else {
+                this.player = this.temporaryPlayer!
+                this.camera.focusOn(this.player)
+                this.temporaryPlayer = null
+            }
+        }
+        if (this.temporaryPlayer) {
+            this.temporaryPlayer.autoFall(deltaTime)
+        }
         this.scoreObject.setText(this.score.toString())
         this.camera.update()
     }
@@ -253,10 +289,16 @@ export class PlayingScene extends Scene {
         // press a or press arrow left
         if (this.keyboardInput.pressed('a') || this.keyboardInput.pressed('ArrowLeft')) {
             this.player.setVelocityDirection(Direction.Left)
+            if (this.temporaryPlayer) {
+                this.temporaryPlayer.setVelocityDirection(Direction.Left)
+            }
         }
         // press d or press arrow right
         else if (this.keyboardInput.pressed('d') || this.keyboardInput.pressed('ArrowRight')) {
             this.player.setVelocityDirection(Direction.Right)
+            if (this.temporaryPlayer) {
+                this.temporaryPlayer.setVelocityDirection(Direction.Right)
+            }
         }
         // press w or press arrow up
         else if (this.keyboardInput.pressed('w') || this.keyboardInput.pressed('ArrowUp')) {
@@ -267,10 +309,16 @@ export class PlayingScene extends Scene {
         // release a or release arrow left
         if (this.keyboardInput.released('a') || this.keyboardInput.released('ArrowLeft')) {
             this.player.setVelocityX(0)
+            if (this.temporaryPlayer) {
+                this.temporaryPlayer.setVelocityX(0)
+            }
         }
         // release d or release arrow right
         else if (this.keyboardInput.released('d') || this.keyboardInput.released('ArrowRight')) {
             this.player.setVelocityX(0)
+            if (this.temporaryPlayer) {
+                this.temporaryPlayer.setVelocityX(0)
+            }
         }
         // release w or release arrow up
         else if (this.keyboardInput.released('w') || this.keyboardInput.released('ArrowUp')) {

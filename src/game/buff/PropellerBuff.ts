@@ -18,4 +18,13 @@ export class PropellerBuff extends Buff {
         player.setBuff(this)
         this.requestLoopAnimation()
     }
+
+    clone(): Buff {
+        let newBuff = new PropellerBuff()
+        newBuff.position = [...this.position]
+        newBuff.size = [...this.size]
+        newBuff.visible = this.visible
+        newBuff.setAnimator(this.cloneAnimator())
+        return newBuff
+    }
 }
