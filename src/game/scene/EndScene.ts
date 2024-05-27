@@ -40,6 +40,7 @@ export class EndScene extends Scene {
     private menuButton: Button
     private playerName: string
     private score: number
+    private highScore: number
     private dataManager: DataManager
     constructor() {
         super()
@@ -69,6 +70,9 @@ export class EndScene extends Scene {
         // load score
         this.score = this.dataManager.getScore()
 
+        // load high score
+        this.highScore = this.dataManager.getHighScore()
+
         // load name
         this.playerName = this.dataManager.getPlayerName()
 
@@ -79,7 +83,7 @@ export class EndScene extends Scene {
 
         // load your high score object
 
-        this.yourHighScoreObject = new TextGameObject('YOUR HIGH SCORE: ' + '0')
+        this.yourHighScoreObject = new TextGameObject('YOUR HIGH SCORE: ' + this.highScore.toString())
         this.yourHighScoreObject.setPosition([...YOUR_HIGH_SCORE_POSITION])
         this.yourHighScoreObject.setHeight(YOUR_HIGH_SCORE_SIZE)
 
@@ -102,8 +106,8 @@ export class EndScene extends Scene {
             this.dataManager.reset()
             this.context.transitionTo(new PlayingScene())
         }
-        else {
-            this.context.transitionTo(new StartScene)
+        else if (this.mouseInput.clicked(this.menuButton)){
+            this.context.transitionTo(new StartScene())
         }
     }
 

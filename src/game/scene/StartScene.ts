@@ -14,7 +14,7 @@ import {
     LAND_POSITION_IN_START_SCENE,
     PLAY_BUTTON_POSITION,
 } from '../constants/FixedPosition'
-import { PLAYER_START_POSITION_IN_START_SCENE } from '../constants/Player'
+import { PLAYER_START_POSITION_IN_START_SCENE, PLAYER_START_VELOCITY_IN_START_SCENE } from '../constants/Player'
 import { WINDOW_HEIGHT } from '../constants/Bounds'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { ISceneContext } from '../../game-engine/scene-handler/ISceneContext'
@@ -39,7 +39,7 @@ export class StartScene extends Scene {
         // load Player
         this.player = new Player()
         this.player.setPosition([...PLAYER_START_POSITION_IN_START_SCENE])
-
+        this.player.setVelocity([...PLAYER_START_VELOCITY_IN_START_SCENE])
         // load PlayButton
         this.playButton = new Button(PlayButtonSprite)
         this.playButton.setPosition([...PLAY_BUTTON_POSITION])
@@ -51,7 +51,11 @@ export class StartScene extends Scene {
 
     processInput(): void {
         if (this.mouseInput.clicked(this.playButton)) {
-            DataManager.getInstance().reset()
+            let dataManager = DataManager.getInstance()
+            dataManager.reset()
+            let lands = dataManager.getLands()
+            lands.push(this.land)
+            dataManager.setPlayer(this.player)
             this.context.transitionTo(new PlayingScene())
         }
     }
