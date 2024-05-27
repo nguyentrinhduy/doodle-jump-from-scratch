@@ -21,6 +21,7 @@ export class AnimationGameObject extends GameObject {
         this.animator.setTimeDifference(0)
         this.animator.setCurrenAnimation(target)
         this.animator.setRangeAnimation(null)
+        this.size = this.animator.getNaturalSize()
     }
     requestMultipleAnimation(from: number, to: number) {
         this.animator.setCurrenAnimation(from)
@@ -31,6 +32,7 @@ export class AnimationGameObject extends GameObject {
         this.animator.timePassed(deltaTime)
     }
     display(cameraOffset: [number, number] = [0, 0]): void {
+        if (!this.visible) return
         this.animator.display(
             [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
             this.size
