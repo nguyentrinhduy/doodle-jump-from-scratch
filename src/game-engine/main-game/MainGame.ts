@@ -22,7 +22,7 @@ export class MainGame implements ISceneContext {
         let currentTime = window.performance.now()
         let deltaTime = currentTime - this.lastTime
         this.currentScene.processInput()
-        this.currentScene.update(deltaTime / 100)
+        this.currentScene.update(deltaTime)
         this.currentScene.render()
         this.lastTime = currentTime
         requestAnimationFrame(this.loop)
