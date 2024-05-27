@@ -24,7 +24,6 @@ export class PauseScene extends Scene {
         this.loadResources()
         // TODO: remove these lines of code with input handler in game engine
         const canvas = document.getElementById('game') as HTMLCanvasElement
-        canvas.addEventListener('click', this.handleMouseClick)
     }
     loadResources() {
         // load background
@@ -40,24 +39,17 @@ export class PauseScene extends Scene {
         this.resumeButton.scaleSize(1.2)
         this.resumeButton.setPosition([...RESUME_BUTTON_POSITION])
     }
-    handleMouseClick = (event: MouseEvent) => {
-        const canvas = document.getElementById('game') as HTMLCanvasElement
-        const rect = canvas.getBoundingClientRect()
-        const mouseX = event.clientX - rect.left
-        const mouseY = event.clientY - rect.top
-
-        if (this.resumeButton.isClicked(mouseX, mouseY)) {
-            this.context.transitionTo(new PlayingScene())
-            canvas.removeEventListener('click', this.handleMouseClick)
-        }
-    }
     render(): void {
         this.background.display()
         this.topBackground.display()
         this.resumeButton.display()
     }
 
-    processInput(): void {}
+    processInput(): void {
+        if (this.mouseInput.clicked(this.resumeButton)) {
+            this.context.transitionTo(new PlayingScene())
+        }
+    }
     update(deltaTime: number): void {
         // none
     }

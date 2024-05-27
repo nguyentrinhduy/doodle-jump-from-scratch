@@ -47,7 +47,6 @@ export class PlayingScene extends Scene {
 
         // TODO: replace these lines of codes with input handler in game engine
         const canvas = document.getElementById('game') as HTMLCanvasElement
-        canvas.addEventListener('click', this.handleMouseClick)
         window.addEventListener('keydown', this.handleArrowKeysPressed)
         window.addEventListener('keyup', this.handleArrowKeysReleased)
     }
@@ -85,17 +84,7 @@ export class PlayingScene extends Scene {
         this.scoreObject.setPosition([0, 50])
         this.scoreObject.setHeight(SCORE_PLAYING_SCENE_SIZE)
     }
-    private handleMouseClick = (event: MouseEvent) => {
-        const canvas = document.getElementById('game') as HTMLCanvasElement
-        const rect = canvas.getBoundingClientRect()
-        const mouseX = event.clientX - rect.left
-        const mouseY = event.clientY - rect.top
 
-        if (this.pauseButton.isClicked(mouseX, mouseY)) {
-            this.context.transitionTo(new PauseScene())
-            canvas.removeEventListener('click', this.handleMouseClick)
-        }
-    }
     private handleArrowKeysReleased = (event: KeyboardEvent) => {
         switch (event.key) {
             case 'w':
@@ -177,7 +166,6 @@ export class PlayingScene extends Scene {
             this.dataManager.setScore(this.score)
             this.context.transitionTo(new EndScene())
             const canvas = document.getElementById('game') as HTMLCanvasElement
-            canvas.removeEventListener('click', this.handleMouseClick)
             window.removeEventListener('keydown', this.handleArrowKeysPressed)
             window.removeEventListener('keyup', this.handleArrowKeysReleased)
             return
@@ -305,5 +293,10 @@ export class PlayingScene extends Scene {
         })
     }
 
-    processInput(): void {}
+    processInput(): void {
+        if (this.mouseInput.clicked(this.pauseButton)) {
+            this.dataManager.setScore(this.score)
+            this.context.transitionTo(new PauseScene())
+        }
+    }
 }
