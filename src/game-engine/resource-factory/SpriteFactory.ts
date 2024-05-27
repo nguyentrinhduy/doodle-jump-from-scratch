@@ -73,7 +73,6 @@ export class SpriteFactory {
             for (let animationIndex = 0; animationIndex < spriteInfo[1]; animationIndex++) {
                 let spriteName = [...spriteInfo[0]]
                 spriteName.push(animationIndex.toString())
-                console.log(spriteName)
                 sprites.push(new Sprite(spriteName))
             }
             this.animationSprites[this.getKey(spriteInfo[0])] = sprites

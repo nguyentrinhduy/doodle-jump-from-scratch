@@ -34,7 +34,6 @@ export class StartScene extends Scene {
     }
     private loadResources() {
         // load Background
-        console.log('getSprite')
 
         this.background = new ImageGameObject(MainMenuSprite)
         this.background.setHeight(WINDOW_HEIGHT)

@@ -17,7 +17,6 @@ export class MainGame implements ISceneContext{
     }
     run() {
         this.lastTime = window.performance.now();
-        console.log(this.lastTime)
         requestAnimationFrame(this.loop)
     }
     private loop(){
