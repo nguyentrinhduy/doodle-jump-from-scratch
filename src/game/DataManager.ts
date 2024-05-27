@@ -14,7 +14,9 @@ export class DataManager {
     private score: number
     private static instance: DataManager
     private camera: Camera
+    private highScore: number
     private constructor() {
+        this.highScore = 0
         this.reset()
     }
 
@@ -37,6 +39,10 @@ export class DataManager {
         return DataManager.instance
     }
 
+    setPlayer(player: Player) {
+        this.player = player
+        this.camera.focusOn(this.player)
+    }
     getPlayer() {
         return this.player
     }
@@ -67,5 +73,10 @@ export class DataManager {
 
     setScore(score: number) {
         this.score = score
+        this.highScore = Math.max(this.highScore, this.score)
+    }
+
+    getHighScore() {
+        return this.highScore
     }
 }

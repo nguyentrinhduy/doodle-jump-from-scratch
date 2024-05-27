@@ -29,6 +29,4 @@ export class KeyboardInput {
     private keyUpEventListener = (event: KeyboardEvent) => {
         this.keyInputReleased = event.key
     }
-
-    
 }
