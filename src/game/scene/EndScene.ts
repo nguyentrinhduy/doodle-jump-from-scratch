@@ -83,7 +83,9 @@ export class EndScene extends Scene {
 
         // load your high score object
 
-        this.yourHighScoreObject = new TextGameObject('YOUR HIGH SCORE: ' + this.highScore.toString())
+        this.yourHighScoreObject = new TextGameObject(
+            'YOUR HIGH SCORE: ' + this.highScore.toString()
+        )
         this.yourHighScoreObject.setPosition([...YOUR_HIGH_SCORE_POSITION])
         this.yourHighScoreObject.setHeight(YOUR_HIGH_SCORE_SIZE)
 
@@ -105,8 +107,7 @@ export class EndScene extends Scene {
         if (this.mouseInput.clicked(this.playAgainButton)) {
             this.dataManager.reset()
             this.context.transitionTo(new PlayingScene())
-        }
-        else if (this.mouseInput.clicked(this.menuButton)){
+        } else if (this.mouseInput.clicked(this.menuButton)) {
             this.context.transitionTo(new StartScene())
         }
     }

@@ -260,7 +260,6 @@ export class PlayingScene extends Scene {
         }
         // press w or press arrow up
         else if (this.keyboardInput.pressed('w') || this.keyboardInput.pressed('ArrowUp')) {
-
         }
 
         // key up
@@ -274,7 +273,6 @@ export class PlayingScene extends Scene {
         }
         // release w or release arrow up
         else if (this.keyboardInput.released('w') || this.keyboardInput.released('ArrowUp')) {
-            
         }
     }
 }

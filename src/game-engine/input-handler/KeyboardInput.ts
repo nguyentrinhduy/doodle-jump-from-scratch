@@ -2,14 +2,14 @@ export class KeyboardInput {
     private keyInputDowned: string
     private keyInputReleased: string
     constructor() {
-        this.keyInputDowned = ""
-        this.keyInputReleased = ""
-        window.addEventListener("keydown", this.keyDownEventListener)
-        window.addEventListener("keyup", this.keyUpEventListener)
+        this.keyInputDowned = ''
+        this.keyInputReleased = ''
+        window.addEventListener('keydown', this.keyDownEventListener)
+        window.addEventListener('keyup', this.keyUpEventListener)
     }
     pressed(key: string) {
         if (this.keyInputDowned == key) {
-            this.keyInputDowned = ""
+            this.keyInputDowned = ''
             return true
         }
         return false
@@ -20,7 +20,7 @@ export class KeyboardInput {
 
     released(key: string) {
         if (this.keyInputReleased == key) {
-            this.keyInputReleased = ""
+            this.keyInputReleased = ''
             return true
         }
         return false
