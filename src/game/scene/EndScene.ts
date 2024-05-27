@@ -1,5 +1,23 @@
-import { BACKGROUND_POSITION, BOTTOM_BACKGROUND_POSITION, GAME_OVER_POSITION, MENU_BUTTON_POSITION, PLAY_AGAIN_BUTTON_POSITION, SCORE_POSITION, TOP_BACKGROUND_POSITION, YOUR_HIGH_SCORE_POSITION, YOUR_NAME_POSITION, YOUR_SCORE_POSITION } from '../constants/FixedPosition'
-import { BackgroundSprite, BottomBackgroundSprite, GameOverSprite, MenuButtonSprite, PlayAgainButtonSprite, TopBackgroundSprite } from '../constants/ResourcePath'
+import {
+    BACKGROUND_POSITION,
+    BOTTOM_BACKGROUND_POSITION,
+    GAME_OVER_POSITION,
+    MENU_BUTTON_POSITION,
+    PLAY_AGAIN_BUTTON_POSITION,
+    SCORE_POSITION,
+    TOP_BACKGROUND_POSITION,
+    YOUR_HIGH_SCORE_POSITION,
+    YOUR_NAME_POSITION,
+    YOUR_SCORE_POSITION,
+} from '../constants/FixedPosition'
+import {
+    BackgroundSprite,
+    BottomBackgroundSprite,
+    GameOverSprite,
+    MenuButtonSprite,
+    PlayAgainButtonSprite,
+    TopBackgroundSprite,
+} from '../constants/ResourcePath'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { GameObject } from '../../game-engine/game-objects/GameObject'
 import { Scene } from '../../game-engine/scene-handler/Scene'
@@ -56,18 +74,18 @@ export class EndScene extends Scene {
         this.playerName = this.dataManager.getPlayerName()
 
         // load your score object
-        this.yourScoreObject = new TextGameObject("YOUR SCORE: " + this.score.toString()) 
+        this.yourScoreObject = new TextGameObject('YOUR SCORE: ' + this.score.toString())
         this.yourScoreObject.setPosition([...YOUR_SCORE_POSITION])
         this.yourScoreObject.setHeight(YOUR_SCORE_SIZE)
 
         // load your high score object
 
-        this.yourHighScoreObject = new TextGameObject("YOUR HIGH SCORE: " + "0")
+        this.yourHighScoreObject = new TextGameObject('YOUR HIGH SCORE: ' + '0')
         this.yourHighScoreObject.setPosition([...YOUR_HIGH_SCORE_POSITION])
         this.yourHighScoreObject.setHeight(YOUR_HIGH_SCORE_SIZE)
 
         // load your name object
-        this.yourNameObject = new TextGameObject("YOUR NAME: " + this.playerName)
+        this.yourNameObject = new TextGameObject('YOUR NAME: ' + this.playerName)
         this.yourNameObject.setPosition([...YOUR_NAME_POSITION])
         this.yourNameObject.setHeight(YOUR_NAME_SIZE)
 
@@ -89,8 +107,7 @@ export class EndScene extends Scene {
         if (this.menuButton.isClicked(mouseX, mouseY)) {
             this.context.transitionTo(new StartScene())
             canvas.removeEventListener('click', this.handleMouseClick)
-        }
-        else if (this.playAgainButton.isClicked(mouseX, mouseY)) {
+        } else if (this.playAgainButton.isClicked(mouseX, mouseY)) {
             this.dataManager.reset()
             this.context.transitionTo(new PlayingScene())
             canvas.removeEventListener('click', this.handleMouseClick)
@@ -104,7 +121,7 @@ export class EndScene extends Scene {
         this.background.display()
         this.topBackground.display()
         this.bottomBackground.display()
-        this.gameOverBackground.display();
+        this.gameOverBackground.display()
         this.playAgainButton.display()
         this.menuButton.display()
         this.yourScoreObject.display()

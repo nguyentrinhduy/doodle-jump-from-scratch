@@ -1,4 +1,1 @@
-export class KeyboardInput {
-    
-    
-}
+export class KeyboardInput {}

@@ -2,7 +2,6 @@ import { AnimationGameObject } from '../../game-engine/game-objects/AnimationGam
 import { GameObject } from '../../game-engine/game-objects/GameObject'
 import { Player } from '../player/Player'
 
-
 export enum BuffType {
     None = 0,
     Propeller = 1,

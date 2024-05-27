@@ -4,9 +4,6 @@ import { GameObject } from './GameObject'
 
 export class Button extends ImageGameObject {
     isClicked(positionX: number, positionY: number): boolean {
-        return this.containsPoint([
-            positionX,
-            positionY,
-        ])
+        return this.containsPoint([positionX, positionY])
     }
 }

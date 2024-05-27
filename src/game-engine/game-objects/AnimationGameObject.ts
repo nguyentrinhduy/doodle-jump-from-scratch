@@ -5,16 +5,11 @@ import { TIME_DIFFERENCE_ANIMATION } from '../constant'
 import { SpriteFactory } from '../resource-factory/SpriteFactory'
 
 export class AnimationGameObject extends GameObject {
-    
     private animator: Animator
 
     constructor(spritesName: string[]) {
         super()
-        this.animator = new Animator(
-            SpriteFactory
-            .getInstance()
-            .getAnimationSprite(spritesName)
-        )
+        this.animator = new Animator(SpriteFactory.getInstance().getAnimationSprite(spritesName))
         this.size = this.animator.getNaturalSize()
     }
     requestLoopAnimation() {
@@ -36,6 +31,9 @@ export class AnimationGameObject extends GameObject {
         this.animator.timePassed(deltaTime)
     }
     display(cameraOffset: [number, number] = [0, 0]): void {
-        this.animator.display([this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]], this.size);
+        this.animator.display(
+            [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
+            this.size
+        )
     }
 }

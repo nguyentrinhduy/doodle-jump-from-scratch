@@ -1,5 +1,5 @@
-import { Scene } from "./Scene";
+import { Scene } from './Scene'
 
-export interface ISceneContext{
-    transitionTo(newScene: Scene): void;
+export interface ISceneContext {
+    transitionTo(newScene: Scene): void
 }

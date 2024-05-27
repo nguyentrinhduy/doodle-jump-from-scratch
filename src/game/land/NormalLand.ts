@@ -62,7 +62,7 @@ export class NormalLand extends ImageGameObject implements ILand {
     move(deltaTime: number): void {}
     override display(cameraOffset?: [number, number]): void {
         super.display(cameraOffset)
-        if (this.buff){
+        if (this.buff) {
             this.buff.display(cameraOffset)
         }
     }

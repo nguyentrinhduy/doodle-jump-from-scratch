@@ -1,5 +1,9 @@
 import { AnimationGameObject } from '../../game-engine/game-objects/AnimationGameObject'
-import { DUST_LAND_CRASHED_INDEX, DUST_LAND_FALL_VELOCITY, DUST_LAND_TOTAL_ANIMATION } from '../constants/Land'
+import {
+    DUST_LAND_CRASHED_INDEX,
+    DUST_LAND_FALL_VELOCITY,
+    DUST_LAND_TOTAL_ANIMATION,
+} from '../constants/Land'
 import { DustLandSprite } from '../constants/ResourcePath'
 import { Player } from '../player/Player'
 import { ILand } from './ILand'

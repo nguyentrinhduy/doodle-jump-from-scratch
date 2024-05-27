@@ -26,6 +26,7 @@ import { MathHandler } from '../../game-engine/math/MathHandler'
 import { DustLand } from '../land/DustLand'
 import { TextGameObject } from '../../game-engine/game-objects/TextGameObject'
 import { BlueWingsMonster } from '../monster/BlueWingsMonster'
+import { AlienMonster } from '../monster/AlienMonster'
 
 export class PlayingScene extends Scene {
     private dataManager: DataManager
@@ -155,23 +156,24 @@ export class PlayingScene extends Scene {
             element.display(cameraOffset)
         })
         this.player.display(cameraOffset)
-        this.monsters.forEach(element => {
+        this.monsters.forEach((element) => {
             element.display(cameraOffset)
-        });
+        })
         this.topBackground.display()
         this.pauseButton.display()
         this.scoreObject.display()
     }
     update(deltaTime: number): void {
-        this.monsters.forEach(element => {
-            if (this.player.collides(element)){
+        this.monsters.forEach((element) => {
+            if (this.player.collides(element)) {
                 element.onCollision(this.player)
             }
-        });
+        })
         if (
             (this.camera.isOutOfBottomRange(this.player) &&
                 this.player.getState() == PlayerState.Fall) ||
-                this.player.getState() == PlayerState.Lose) {
+            this.player.getState() == PlayerState.Lose
+        ) {
             this.dataManager.setScore(this.score)
             this.context.transitionTo(new EndScene())
             const canvas = document.getElementById('game') as HTMLCanvasElement
@@ -278,10 +280,20 @@ export class PlayingScene extends Scene {
                     this.monsters.push(newMonster)
                     break
                 }
+                case MonsterType.AlienMonster:
+                    let newMonster = new AlienMonster()
+                    newMonster.setPosition([
+                        mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
+                        mathHandler.getRandomFloat(
+                            previousHeight - newMonster.getHeight() - 1000,
+                            previousHeight - newMonster.getHeight() - 700
+                        ),
+                    ])
+                    this.monsters.push(newMonster)
+                    break
                 default: {
                     break
                 }
-                
             }
         }
         this.lands.forEach((element) => {

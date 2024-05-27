@@ -15,6 +15,9 @@ export class ImageGameObject extends GameObject {
     }
     display(cameraOffset: [number, number] = [0, 0]) {
         // console.log("getSprite");
-        this.sprite.display([this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]], this.size)
+        this.sprite.display(
+            [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
+            this.size
+        )
     }
 }

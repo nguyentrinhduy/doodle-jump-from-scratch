@@ -1,6 +1,7 @@
 // import { canvas } from "../MainGame";
 import { Sprite } from './Sprite'
 import {
+    AlienMonsterSprite,
     BackgroundSprite,
     BlueWingsMonsterSprite,
     DustLandSprite,
@@ -58,6 +59,7 @@ const INITIAL_ANIMATIONS: [string[], number][] = [
     [SpringBuffSprite, 2],
     [DustLandSprite, 4],
     [BlueWingsMonsterSprite, 8],
+    [AlienMonsterSprite, 2],
 ]
 export class SpriteFactory {
     private Sprites: { [key: string]: Sprite } = <any>{}
