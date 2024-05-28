@@ -52,7 +52,8 @@ const INITIAL_SPRITES = [
     MovingLandSprite,
     GameOverSprite,
     MenuButtonSprite,
-    BulletSprite
+    BulletSprite,
+    PlayerShootSprite,
 ]
 
 const INITIAL_ANIMATIONS: [string[], number][] = [
