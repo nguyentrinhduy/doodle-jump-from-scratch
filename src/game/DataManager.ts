@@ -15,6 +15,7 @@ export class DataManager {
     private static instance: DataManager
     private camera: Camera
     private highScore: number
+    private difficulty: number
     private constructor() {
         this.highScore = 0
         this.reset()
@@ -30,6 +31,7 @@ export class DataManager {
         this.monsters = []
         this.playerName = 'Unknown Player'
         this.score = 0
+        this.difficulty = 0
     }
 
     static getInstance(): DataManager {
@@ -78,5 +80,12 @@ export class DataManager {
 
     getHighScore() {
         return this.highScore
+    }
+
+    setDifficulty(difficulty: number) {
+        this.difficulty = difficulty
+    }
+    getDifficulty() {
+        return this.difficulty
     }
 }

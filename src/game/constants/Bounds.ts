@@ -7,3 +7,4 @@ export const SCORE_PLAYING_SCENE_SIZE = 50
 export const YOUR_SCORE_SIZE = 40
 export const YOUR_HIGH_SCORE_SIZE = 40
 export const YOUR_NAME_SIZE = 40
+export const DIFFICULTY_RATIO = 0.001
