@@ -1,47 +1,30 @@
 export class KeyboardInput {
-    private keyInputDowned: string
-    private keyInputReleased: string
-    private keyInputPressed: string
+    private keyDownInput:  { [key: string]: boolean}
+    private keyUpInput: {[key: string]: boolean}
     constructor() {
-        this.keyInputDowned = ''
-        this.keyInputReleased = ''
+        this.keyDownInput = {}
+        this.keyUpInput = {}
         window.addEventListener('keydown', this.keyDownEventListener)
-        window.addEventListener('keypress', this.keyPressEventListener)
         window.addEventListener('keyup', this.keyUpEventListener)
     }
     keyDown(key: string) {
-        if (this.keyInputDowned == key) {
-            this.keyInputDowned = ''
-            return true
-        }
-        return false
-    }
-
-    keyPressed(key: string) {
-        if (this.keyInputPressed == key) {
-            this.keyInputPressed = ''
-            return true
-        }
-        return false
+        if (!(key in this.keyDownInput)) return false
+        return this.keyDownInput[key]
     }
 
     keyReleased(key: string) {
-        if (this.keyInputReleased == key) {
-            this.keyInputReleased = ''
-            return true
-        }
-        return false
+        if (!(key in this.keyUpInput)) return false
+        
+        return this.keyUpInput[key]
     }
 
     private keyDownEventListener = (event: KeyboardEvent) => {
-        this.keyInputDowned = event.key
-    }
-
-    private keyPressEventListener = (event: KeyboardEvent) => {
-        this.keyInputPressed = event.key
+        this.keyDownInput[event.key] = true
+        this.keyUpInput[event.key] = false
     }
 
     private keyUpEventListener = (event: KeyboardEvent) => {
-        this.keyInputReleased = event.key
+        this.keyDownInput[event.key] = false
+        this.keyUpInput[event.key] = true
     }
 }

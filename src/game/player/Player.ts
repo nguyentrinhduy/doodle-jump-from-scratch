@@ -158,7 +158,6 @@ export class Player extends ImageGameObject {
             }
             case PlayerState.ShootUp: {
                 this.setSprite(PlayerShootSprite)
-                this.specialStateTime = PLAYER_SHOOTING_TIME
                 break
             }
             default: {
@@ -168,7 +167,9 @@ export class Player extends ImageGameObject {
             }
         }
     }
-
+    setSpecialStateTime(time: number) {
+        this.specialStateTime = time
+    }
     shoot(velocity: [number, number]) {
         return new Bullet(
             [
