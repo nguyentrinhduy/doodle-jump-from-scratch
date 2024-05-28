@@ -22,7 +22,7 @@ import {
 } from '../constants/Player'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Bullet } from '../player/Bullet'
-import { SCORE_PLAYING_SCENE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
+import { DIFFICULTY_RATIO, SCORE_PLAYING_SCENE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
 import { NormalLand } from '../land/NormalLand'
 import { LAND_HEIGHT, LAND_WIDTH } from '../constants/Land'
 import { MovingLand } from '../land/MovingLand'
@@ -48,7 +48,7 @@ export class PlayingScene extends Scene {
     private bulletReloadTime: number
     private lastStandableLandHeight: number
     private temporaryPlayer: Player | null
-
+    private difficulty: number
     constructor() {
         super()
         this.dataManager = DataManager.getInstance()
@@ -90,6 +90,9 @@ export class PlayingScene extends Scene {
         this.scoreObject = new TextGameObject(this.score.toString())
         this.scoreObject.setPosition([0, 50])
         this.scoreObject.setHeight(SCORE_PLAYING_SCENE_SIZE)
+
+        // load difficulty
+        this.difficulty = this.dataManager.getDifficulty()
     }
 
     processInput(): void {
@@ -128,6 +131,7 @@ export class PlayingScene extends Scene {
             this.player.getState() == PlayerState.Lose
         ) {
             this.dataManager.setScore(this.score)
+            this.dataManager.setDifficulty(this.difficulty)
             this.context.transitionTo(new EndScene())
             return
         }
@@ -175,6 +179,7 @@ export class PlayingScene extends Scene {
         }
         this.scoreObject.setText(this.score.toString())
         this.camera.update()
+        this.difficulty = this.score * DIFFICULTY_RATIO
     }
     private checkCollidesMonster() {
         // check if a bullet collides a monsters
@@ -245,8 +250,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 20,
-                            previousHeight - LAND_HEIGHT
+                            previousHeight - LAND_HEIGHT - 30 - Math.min(10, this.difficulty),
+                            previousHeight - LAND_HEIGHT - 10 - Math.min(20, this.difficulty)
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -259,8 +264,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 20,
-                            previousHeight - LAND_HEIGHT
+                            previousHeight - LAND_HEIGHT - 30 - Math.min(10, this.difficulty),
+                            previousHeight - LAND_HEIGHT - 10 - Math.min(20, this.difficulty)
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -273,8 +278,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 20,
-                            previousHeight - LAND_HEIGHT
+                            previousHeight - LAND_HEIGHT - 30 - Math.min(10, this.difficulty),
+                            previousHeight - LAND_HEIGHT - 10 - Math.min(20, this.difficulty)
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -301,7 +306,7 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 3000,
+                            previousHeight - newMonster.getHeight() - 3000 + Math.min(800, this.difficulty),
                             previousHeight - newMonster.getHeight() - 2000
                         ),
                     ])
@@ -313,7 +318,7 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 3000,
+                            previousHeight - newMonster.getHeight() - 3000 + Math.min(800, this.difficulty),
                             previousHeight - newMonster.getHeight() - 2000
                         ),
                     ])
