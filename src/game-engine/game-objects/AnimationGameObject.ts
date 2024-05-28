@@ -45,5 +45,4 @@ export class AnimationGameObject extends GameObject {
     setAnimator(animator: Animator) {
         this.animator = animator
     }
-
 }

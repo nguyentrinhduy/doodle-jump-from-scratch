@@ -42,8 +42,8 @@ export class Animator {
     getNaturalSize() {
         return this.sprites[this.currentAnimation].getNaturalSize()
     }
-    display(position: [number, number], velocity: [number, number]) {
-        this.sprites[this.currentAnimation].display(position, velocity)
+    display(position: [number, number], size: [number, number]) {
+        this.sprites[this.currentAnimation].display(position, size)
     }
     clone() {
         let newAnimator = new Animator(this.sprites)
@@ -53,8 +53,7 @@ export class Animator {
         newAnimator.timeDisplay = this.timeDisplay
         if (this.range) {
             newAnimator.range = [...this.range]
-        }
-        else {
+        } else {
             newAnimator.range = null
         }
         return newAnimator

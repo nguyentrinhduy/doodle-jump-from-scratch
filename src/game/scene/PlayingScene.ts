@@ -139,33 +139,29 @@ export class PlayingScene extends Scene {
         this.score = Math.round(
             Math.max(this.score, PLAYER_START_POSITION[1] - this.player.getPositionY())
         )
-        if (this.player.getPositionX() < 0){
+        if (this.player.getPositionX() < 0) {
             if (this.player.getPositionX() + this.player.getWidth() > 0) {
                 if (!this.temporaryPlayer) {
                     this.temporaryPlayer = this.player.clone()
                     this.temporaryPlayer.setPositionX(this.player.getPositionX() + WINDOW_WIDTH)
                 }
-            }
-            else {
+            } else {
                 this.player = this.temporaryPlayer!
                 this.camera.focusOn(this.player)
                 this.temporaryPlayer = null
             }
-        }
-        else if (this.player.getPositionX() + this.player.getWidth() > WINDOW_WIDTH){
+        } else if (this.player.getPositionX() + this.player.getWidth() > WINDOW_WIDTH) {
             if (this.player.getPositionX() < WINDOW_WIDTH) {
                 if (!this.temporaryPlayer) {
                     this.temporaryPlayer = this.player.clone()
                     this.temporaryPlayer.setPositionX(this.player.getPositionX() - WINDOW_WIDTH)
                 }
-            }
-            else {
+            } else {
                 this.player = this.temporaryPlayer!
                 this.camera.focusOn(this.player)
                 this.temporaryPlayer = null
             }
-        }
-        else {
+        } else {
             this.temporaryPlayer = null
         }
         if (this.temporaryPlayer) {
@@ -197,7 +193,7 @@ export class PlayingScene extends Scene {
             if (previousHeight - this.lastStandableLandHeight >= 30) {
                 randomNum = mathHandler.getRandomInt(0, 1)
             }
-            
+
             switch (randomNum) {
                 case LandType.NormalLand: {
                     let newLand = new NormalLand()
@@ -243,9 +239,11 @@ export class PlayingScene extends Scene {
             }
         }
         while (
-            (this.player.getState() == PlayerState.Jump || this.player.getState() == PlayerState.Fall) &&
+            (this.player.getState() == PlayerState.Jump ||
+                this.player.getState() == PlayerState.Fall) &&
             (this.monsters.length == 0 ||
-            this.monsters[this.monsters.length - 1].getPositionY() - this.camera.getOffsetY() >= 700)
+                this.monsters[this.monsters.length - 1].getPositionY() - this.camera.getOffsetY() >=
+                    700)
         ) {
             let previousHeight = 0
             if (this.monsters.length > 0) {

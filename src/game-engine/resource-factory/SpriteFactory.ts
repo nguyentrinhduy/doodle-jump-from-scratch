@@ -87,8 +87,8 @@ export class SpriteFactory {
         return SpriteFactory.instance
     }
 
-    private getKey(Scene: string[]): string {
-        return Scene.join('_')
+    private getKey(spriteName: string[]): string {
+        return spriteName.join('_')
     }
     getSprite(spriteName: string[]): Sprite {
         const key = this.getKey(spriteName)

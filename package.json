@@ -9,7 +9,8 @@
     "bundle": "npm run build",
     "preview": "serve dist",
     "util:check": "prettier --check src/scripts/**",
-    "util:format": "prettier --write src/**"
+    "util:format": "prettier --write src/**",
+    "deploy": "gh-pages -d dist"
   },
   "alias": {
     "@/": "./src"
@@ -36,6 +37,7 @@
     "copy-webpack-plugin": "^10.1.0",
     "eslint": "^8.42.0",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "gh-pages": "^6.1.1",
     "html-webpack-plugin": "^5.5.0",
     "javascript-obfuscator": "^4.0.0",
     "prettier": "^2.5.1",

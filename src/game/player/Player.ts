@@ -177,8 +177,7 @@ export class Player extends ImageGameObject {
         player.sprite = this.sprite
         if (this.buff) {
             player.buff = this.buff.clone()
-        }
-        else {
+        } else {
             player.buff = null
         }
         return player
