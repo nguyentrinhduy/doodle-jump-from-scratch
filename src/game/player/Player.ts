@@ -7,9 +7,12 @@ import {
     PlayerFallRightSprite,
     PlayerJumpLeftSprite,
     PlayerJumpRightSprite,
+    PlayerShootSprite,
 } from '../constants/ResourcePath'
 import {
+    BULLET_INITIAL_POSITION,
     GRAVITY_ACCELERATION,
+    PLAYER_SHOOTING_TIME,
     PLAYER_START_POSITION,
     PLAYER_START_VELOCITY,
     PLAYER_START_VELOCITY_IN_PLAYING_SCENE,
@@ -24,7 +27,7 @@ import { PhysicsHandler } from '../../game-engine/physics/PhysicsHandler'
 export class Player extends ImageGameObject {
     private state: PlayerState
     private direction: Direction
-    private buffTime: number
+    private specialStateTime: number
     private buff: Buff | null
     private physicsHandler: PhysicsHandler
     constructor() {
@@ -32,7 +35,7 @@ export class Player extends ImageGameObject {
         this.position = [...PLAYER_START_POSITION]
         this.state = PlayerState.Jump
         this.direction = Direction.Left
-        this.buffTime = 0
+        this.specialStateTime = 0
         this.scaleSize(1.5)
         this.physicsHandler = new PhysicsHandler(this)
         this.physicsHandler.setVelocity([...PLAYER_START_VELOCITY_IN_PLAYING_SCENE])
@@ -55,16 +58,19 @@ export class Player extends ImageGameObject {
 
     autoFall(deltaTime: number) {
         this.physicsHandler.update(deltaTime)
-        if (this.buffTime > 0) {
-            this.buffTime -= deltaTime
-            if (this.buffTime <= 0) {
-                this.buffTime = 0
+        if (this.specialStateTime > 0) {
+            this.specialStateTime -= deltaTime
+            if (this.specialStateTime <= 0) {
+                this.specialStateTime = 0
                 this.buff = null
                 this.setState(PlayerState.Jump)
                 this.physicsHandler.setEnable(true)
             } else {
-                this.buff!.timePassed(deltaTime)
-                this.resolveBuffPosition()
+                if (this.buff){
+                    this.buff!.timePassed(deltaTime)
+                    this.resolveBuffPosition()
+                }
+                
             }
         }
         if (this.physicsHandler.getVelocityY() >= 0) {
@@ -94,11 +100,15 @@ export class Player extends ImageGameObject {
     setVelocityX(x: number) {
         this.physicsHandler.setVelocityX(x)
     }
-
+    getVelocityX() {
+        return this.physicsHandler.getVelocityX()
+    }
     setVelocityY(y: number) {
         this.physicsHandler.setVelocityY(y)
     }
-
+    getVelocityY() {
+        return this.physicsHandler.getVelocityY()
+    }
     applyGravity(isAppliedPhysics: boolean) {
         this.physicsHandler.setEnable(isAppliedPhysics)
     }
@@ -116,7 +126,7 @@ export class Player extends ImageGameObject {
     }
 
     setBuffTime(time: number) {
-        this.buffTime = time
+        this.specialStateTime = time
     }
 
     setBuff(buff: Buff) {
@@ -136,6 +146,11 @@ export class Player extends ImageGameObject {
                 else this.setSprite(PlayerJumpRightSprite)
                 break
             }
+            case PlayerState.ShootUp: {
+                this.setSprite(PlayerShootSprite)
+                this.specialStateTime = PLAYER_SHOOTING_TIME
+                break
+            }
             default: {
                 if (direction == Direction.Right) this.setSprite(PlayerFallRightSprite)
                 else this.setSprite(PlayerFallLeftSprite)
@@ -145,7 +160,7 @@ export class Player extends ImageGameObject {
     }
 
     shoot(velocity: [number, number]) {
-        return new Bullet(this.position, velocity)
+        return new Bullet([this.position[0] + BULLET_INITIAL_POSITION[0], this.position[1] + BULLET_INITIAL_POSITION[1]], velocity)
     }
 
     autoFallInStartScene(deltaTime: number) {
@@ -173,7 +188,7 @@ export class Player extends ImageGameObject {
         player.state = this.state
         player.direction = this.direction
         player.physicsHandler = this.physicsHandler.clone(player)
-        player.buffTime = this.buffTime
+        player.specialStateTime = this.specialStateTime
         player.sprite = this.sprite
         if (this.buff) {
             player.buff = this.buff.clone()

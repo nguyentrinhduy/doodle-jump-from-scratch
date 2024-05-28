@@ -74,7 +74,9 @@ export class MovingLand extends ImageGameObject implements ILand {
             this.buff.onReceived(player)
         } else {
             player.setVelocity([...PLAYER_START_VELOCITY])
-            player.setState(PlayerState.Jump)
+            if (player.getState() != PlayerState.ShootUp) {
+                player.setState(PlayerState.Jump)
+            }
         }
     }
     override display(cameraOffset?: [number, number]): void {

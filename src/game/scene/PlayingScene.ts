@@ -14,7 +14,7 @@ import { Direction, PlayerState } from '../player/PlayerState'
 import { EndScene } from './EndScene'
 import { ILand, Land, LandType } from '../land/ILand'
 import { Monster, MonsterType } from '../monster/Monster'
-import { PLAYER_START_POSITION } from '../constants/Player'
+import { BULLET_UP_VELOCITY, PLAYER_START_POSITION, PLAYER_START_VELOCITY } from '../constants/Player'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Bullet } from '../player/Bullet'
 import { SCORE_PLAYING_SCENE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
@@ -102,6 +102,9 @@ export class PlayingScene extends Scene {
         this.lands.forEach((element) => {
             element.display(cameraOffset)
         })
+        this.bullets.forEach(element => {
+            element.display(cameraOffset)
+        });
         this.player.display(cameraOffset)
         if (this.temporaryPlayer) {
             this.temporaryPlayer.display(cameraOffset)
@@ -114,11 +117,7 @@ export class PlayingScene extends Scene {
         this.scoreObject.display()
     }
     update(deltaTime: number): void {
-        this.monsters.forEach((element) => {
-            if (this.player.collides(element)) {
-                element.onCollision(this.player)
-            }
-        })
+        this.checkCollidesMonster()
         if (
             (this.camera.isOutOfBottomRange(this.player) &&
                 this.player.getState() == PlayerState.Fall) ||
@@ -130,12 +129,15 @@ export class PlayingScene extends Scene {
         }
         // console.log(this.player.velocity[1]);
         this.lands.forEach((element) => {
-            if (this.player.standOn(element) && this.player.getState() == PlayerState.Fall) {
+            if (this.player.standOn(element) && this.player.getVelocityY() > 0) {
                 element.onJumped(this.player)
             }
         })
         this.updateMap(deltaTime)
         this.player.autoFall(deltaTime)
+        this.bullets.forEach(element => {
+            element.move(deltaTime)
+        });
         this.score = Math.round(
             Math.max(this.score, PLAYER_START_POSITION[1] - this.player.getPositionY())
         )
@@ -170,15 +172,49 @@ export class PlayingScene extends Scene {
         this.scoreObject.setText(this.score.toString())
         this.camera.update()
     }
+    private checkCollidesMonster() {
+        // check if a bullet collides a monsters
+        for (let iMonster = 0; iMonster < this.monsters.length; iMonster ++) {
+            for (let iBullet = 0; iBullet < this.bullets.length; iBullet ++) {
+                if (this.monsters[iMonster].collides(this.bullets[iBullet])) {
+                    this.monsters.splice(iMonster, 1)
+                    this.bullets.splice(iBullet, 1)
+                    return
+                }
+            }
+            if (this.monsters[iMonster].collides(this.player)) {
+                if (this.player.standOn(this.monsters[iMonster]) && this.player.getVelocityY() > 0) {
+                    this.monsters.splice(iMonster, 1)
+                    this.player.setVelocity([...PLAYER_START_VELOCITY])
+                    if (this.temporaryPlayer) {
+                        this.temporaryPlayer.setVelocity([...PLAYER_START_VELOCITY])
+                    }
+                    if (this.player.getState() != PlayerState.ShootUp) {
+                        this.player.setState(PlayerState.Jump)
+                        if (this.temporaryPlayer) {
+                            this.temporaryPlayer.setState(PlayerState.Jump)
+                        }
+                    }
+                }
+                else {
+                    this.player.setState(PlayerState.Lose)
+                }
+                return
+            }
+        }
+    }
     private updateMap(deltaTime: number) {
         // remove stuffs below the camera
         while (this.lands.length > 0 && this.camera.isOutOfBottomRange(this.lands[0])) {
             this.lands.shift()
         }
-        while (this.monsters.length > 0 && this.camera.isOutOfBottomRange(this.monsters[0])) {
+        while (this.monsters.length > 0 && (this.camera.isOutOfBottomRange(this.monsters[0])|| this.player.getBuff())) {
             this.monsters.shift()
         }
-
+        while(this.bullets.length > 0 && this.camera.isOutOfRange(this.bullets[0])) {
+            this.bullets.shift()
+        }
+        
         // add stuffs above the camera
         let mathHandler = MathHandler.getInstance()
         while (
@@ -200,8 +236,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 40,
-                            previousHeight - LAND_HEIGHT - 20
+                            previousHeight - LAND_HEIGHT - 20,
+                            previousHeight - LAND_HEIGHT
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -214,8 +250,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 40,
-                            previousHeight - LAND_HEIGHT - 20
+                            previousHeight - LAND_HEIGHT - 20,
+                            previousHeight - LAND_HEIGHT
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -228,8 +264,8 @@ export class PlayingScene extends Scene {
                     newLand.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newLand.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - LAND_HEIGHT - 40,
-                            previousHeight - LAND_HEIGHT - 20
+                            previousHeight - LAND_HEIGHT - 20,
+                            previousHeight - LAND_HEIGHT
                         ),
                     ])
                     newLand.randomizeBuff()
@@ -245,7 +281,7 @@ export class PlayingScene extends Scene {
                 this.monsters[this.monsters.length - 1].getPositionY() - this.camera.getOffsetY() >=
                     700)
         ) {
-            let previousHeight = 0
+            let previousHeight = this.camera.getOffsetY()
             if (this.monsters.length > 0) {
                 previousHeight = this.monsters[this.monsters.length - 1].getPositionY()
             }
@@ -256,8 +292,8 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 2000,
-                            previousHeight - newMonster.getHeight() - 1500
+                            previousHeight - newMonster.getHeight() - 3000,
+                            previousHeight - newMonster.getHeight() - 2000
                         ),
                     ])
                     this.monsters.push(newMonster)
@@ -268,8 +304,8 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 2000,
-                            previousHeight - newMonster.getHeight() - 1500
+                            previousHeight - newMonster.getHeight() - 3000,
+                            previousHeight - newMonster.getHeight() - 2000
                         ),
                     ])
                     this.monsters.push(newMonster)
@@ -298,40 +334,51 @@ export class PlayingScene extends Scene {
     private keyboardInputProcessing() {
         // key down
         // press a or press arrow left
-        if (this.keyboardInput.pressed('a') || this.keyboardInput.pressed('ArrowLeft')) {
+        if (this.keyboardInput.keyDown('a') || this.keyboardInput.keyDown('ArrowLeft')) {
             this.player.setVelocityDirection(Direction.Left)
             if (this.temporaryPlayer) {
                 this.temporaryPlayer.setVelocityDirection(Direction.Left)
             }
         }
         // press d or press arrow right
-        else if (this.keyboardInput.pressed('d') || this.keyboardInput.pressed('ArrowRight')) {
+        else if (this.keyboardInput.keyDown('d') || this.keyboardInput.keyDown('ArrowRight')) {
             this.player.setVelocityDirection(Direction.Right)
             if (this.temporaryPlayer) {
                 this.temporaryPlayer.setVelocityDirection(Direction.Right)
             }
         }
+
+
+
+        // key press
         // press w or press arrow up
-        else if (this.keyboardInput.pressed('w') || this.keyboardInput.pressed('ArrowUp')) {
+        if (this.keyboardInput.keyPressed('w') || this.keyboardInput.keyPressed('ArrowUp')) {
+            if (this.player.getState() == PlayerState.Fall || this.player.getState() == PlayerState.Jump || this.player.getState() == PlayerState.ShootUp) {
+                this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]));
+                this.player.setState(PlayerState.ShootUp)
+                if (this.temporaryPlayer) [
+                    this.temporaryPlayer.setState(PlayerState.ShootUp)
+                ]
+            }
         }
+
+
 
         // key up
         // release a or release arrow left
-        if (this.keyboardInput.released('a') || this.keyboardInput.released('ArrowLeft')) {
+        if (this.keyboardInput.keyReleased('a') || this.keyboardInput.keyReleased('ArrowLeft')) {
             this.player.setVelocityX(0)
             if (this.temporaryPlayer) {
                 this.temporaryPlayer.setVelocityX(0)
             }
         }
         // release d or release arrow right
-        else if (this.keyboardInput.released('d') || this.keyboardInput.released('ArrowRight')) {
+        else if (this.keyboardInput.keyReleased('d') || this.keyboardInput.keyReleased('ArrowRight')) {
             this.player.setVelocityX(0)
             if (this.temporaryPlayer) {
                 this.temporaryPlayer.setVelocityX(0)
             }
         }
-        // release w or release arrow up
-        else if (this.keyboardInput.released('w') || this.keyboardInput.released('ArrowUp')) {
-        }
+
     }
 }

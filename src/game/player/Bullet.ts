@@ -10,4 +10,8 @@ export class Bullet extends ImageGameObject {
         this.position = position
         this.velocity = velocity
     }
+    move(deltaTime: number) {
+        this.position[0] += this.velocity[0] * deltaTime
+        this.position[1] += this.velocity[1] * deltaTime
+    }
 }
