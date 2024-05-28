@@ -145,7 +145,7 @@ export class Player extends ImageGameObject {
     }
 
     shoot(velocity: [number, number]) {
-        return new Bullet(this.position, velocity)
+        return new Bullet([...this.position], velocity)
     }
 
     autoFallInStartScene(deltaTime: number) {

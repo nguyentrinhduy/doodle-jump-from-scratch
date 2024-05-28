@@ -4,6 +4,7 @@ import {
     AlienMonsterSprite,
     BackgroundSprite,
     BlueWingsMonsterSprite,
+    BulletSprite,
     DustLandSprite,
     GameOverSprite,
     JetpackBuffSprite,
@@ -51,6 +52,7 @@ const INITIAL_SPRITES = [
     MovingLandSprite,
     GameOverSprite,
     MenuButtonSprite,
+    BulletSprite
 ]
 
 const INITIAL_ANIMATIONS: [string[], number][] = [
