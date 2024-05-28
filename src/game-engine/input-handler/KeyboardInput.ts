@@ -1,47 +1,39 @@
 export class KeyboardInput {
-    private keyInputDowned: string
-    private keyInputReleased: string
-    private keyInputPressed: string
+    private keyDownInput:  { [key: string]: boolean }
+    private keyUpInput: { [key: string]: boolean }
+    private mapKey: { [key: string]: string}
     constructor() {
-        this.keyInputDowned = ''
-        this.keyInputReleased = ''
+        this.keyDownInput = {}
+        this.keyUpInput = {}
+        this.mapKey = {}
+        this.mapKey['w'] = 'w'
+        this.mapKey['ArrowUp'] = 'w'
+        this.mapKey['a'] = 'a'
+        this.mapKey['ArrowLeft'] = 'a'
+        this.mapKey['s'] = 's'
+        this.mapKey['ArrowDown'] = 's'
+        this.mapKey['d'] = 'd'
+        this.mapKey['ArrowRight'] = 'd'
         window.addEventListener('keydown', this.keyDownEventListener)
-        window.addEventListener('keypress', this.keyPressEventListener)
         window.addEventListener('keyup', this.keyUpEventListener)
     }
     keyDown(key: string) {
-        if (this.keyInputDowned == key) {
-            this.keyInputDowned = ''
-            return true
-        }
-        return false
-    }
-
-    keyPressed(key: string) {
-        if (this.keyInputPressed == key) {
-            this.keyInputPressed = ''
-            return true
-        }
-        return false
+        if (!(this.mapKey[key] in this.keyDownInput)) return false
+        return this.keyDownInput[this.mapKey[key]]
     }
 
     keyReleased(key: string) {
-        if (this.keyInputReleased == key) {
-            this.keyInputReleased = ''
-            return true
-        }
-        return false
+        if (!(this.mapKey[key] in this.keyUpInput)) return false
+        return this.keyUpInput[this.mapKey[key]]
     }
 
     private keyDownEventListener = (event: KeyboardEvent) => {
-        this.keyInputDowned = event.key
-    }
-
-    private keyPressEventListener = (event: KeyboardEvent) => {
-        this.keyInputPressed = event.key
+        this.keyDownInput[this.mapKey[event.key]] = true
+        this.keyUpInput[this.mapKey[event.key]] = false
     }
 
     private keyUpEventListener = (event: KeyboardEvent) => {
-        this.keyInputReleased = event.key
+        this.keyDownInput[this.mapKey[event.key]] = false
+        this.keyUpInput[this.mapKey[event.key]] = true
     }
 }

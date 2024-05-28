@@ -16,6 +16,7 @@ import { ILand, Land, LandType } from '../land/ILand'
 import { Monster, MonsterType } from '../monster/Monster'
 import {
     BULLET_UP_VELOCITY,
+    PLAYER_SHOOTING_TIME,
     PLAYER_START_POSITION,
     PLAYER_START_VELOCITY,
 } from '../constants/Player'
@@ -47,11 +48,13 @@ export class PlayingScene extends Scene {
     private bulletReloadTime: number
     private lastStandableLandHeight: number
     private temporaryPlayer: Player | null
+    private shootAllowed: boolean
 
     constructor() {
         super()
         this.dataManager = DataManager.getInstance()
         this.loadResources()
+        this.shootAllowed = true
     }
     private loadResources() {
         // set null for temporary player
@@ -340,29 +343,6 @@ export class PlayingScene extends Scene {
     }
 
     private keyboardInputProcessing() {
-        // key down
-        // press a or press arrow left
-        if (this.keyboardInput.keyDown('a') || this.keyboardInput.keyDown('ArrowLeft')) {
-            this.player.setVelocityDirection(Direction.Left)
-        }
-        // press d or press arrow right
-        else if (this.keyboardInput.keyDown('d') || this.keyboardInput.keyDown('ArrowRight')) {
-            this.player.setVelocityDirection(Direction.Right)
-        }
-
-        // key press
-        // press w or press arrow up
-        if (this.keyboardInput.keyPressed('w') || this.keyboardInput.keyPressed('ArrowUp')) {
-            if (
-                this.player.getState() == PlayerState.Fall ||
-                this.player.getState() == PlayerState.Jump ||
-                this.player.getState() == PlayerState.ShootUp
-            ) {
-                this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]))
-                this.player.setState(PlayerState.ShootUp)
-            }
-        }
-
         // key up
         // release a or release arrow left
         if (this.keyboardInput.keyReleased('a') || this.keyboardInput.keyReleased('ArrowLeft')) {
@@ -374,6 +354,38 @@ export class PlayingScene extends Scene {
             this.keyboardInput.keyReleased('ArrowRight')
         ) {
             this.player.setVelocityX(0)
+        }
+        // release w or release arrow up
+        if (
+            this.keyboardInput.keyReleased('w') ||
+            this.keyboardInput.keyReleased('ArrowUp')
+        ) {
+            this.shootAllowed = true
+        }
+
+        // key down
+        // press a or press arrow left
+        if (this.keyboardInput.keyDown('a') || this.keyboardInput.keyDown('ArrowLeft')) {
+            this.player.setVelocityDirection(Direction.Left)
+        }
+        // press d or press arrow right
+        else if (this.keyboardInput.keyDown('d') || this.keyboardInput.keyDown('ArrowRight')) {
+            this.player.setVelocityDirection(Direction.Right)
+        }
+        // press w or press arrow up
+        if (this.keyboardInput.keyDown('w') || this.keyboardInput.keyDown('ArrowUp')) {
+            if (
+                this.player.getState() == PlayerState.Fall ||
+                this.player.getState() == PlayerState.Jump ||
+                this.player.getState() == PlayerState.ShootUp
+            ) {
+                if (this.shootAllowed){
+                    this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]))
+                    this.shootAllowed = false
+                }
+                this.player.setState(PlayerState.ShootUp)
+                this.player.setSpecialStateTime(PLAYER_SHOOTING_TIME)
+            }
         }
     }
 }
