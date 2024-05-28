@@ -66,11 +66,10 @@ export class Player extends ImageGameObject {
                 this.setState(PlayerState.Jump)
                 this.physicsHandler.setEnable(true)
             } else {
-                if (this.buff){
+                if (this.buff) {
                     this.buff!.timePassed(deltaTime)
                     this.resolveBuffPosition()
                 }
-                
             }
         }
         if (this.physicsHandler.getVelocityY() >= 0) {
@@ -171,7 +170,13 @@ export class Player extends ImageGameObject {
     }
 
     shoot(velocity: [number, number]) {
-        return new Bullet([this.position[0] + BULLET_INITIAL_POSITION[0], this.position[1] + BULLET_INITIAL_POSITION[1]], velocity)
+        return new Bullet(
+            [
+                this.position[0] + BULLET_INITIAL_POSITION[0],
+                this.position[1] + BULLET_INITIAL_POSITION[1],
+            ],
+            velocity
+        )
     }
 
     autoFallInStartScene(deltaTime: number) {

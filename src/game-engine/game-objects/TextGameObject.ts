@@ -23,7 +23,6 @@ export class TextGameObject extends GameObject {
         const ctx = canvas.getContext('2d')
         if (ctx) {
             ctx.font = this.size[1].toString() + 'px ' + this.font
-            // console.log(ctx.font)
             ctx.fillText(this.text, this.position[0], this.position[1])
         }
     }

@@ -9,7 +9,6 @@ export class Sprite {
         resourcePath += filePath.join('/')
         resourcePath += '.png'
         this.image.src = resourcePath
-        console.log(resourcePath)
     }
     getNaturalSize(): [number, number] {
         return [this.image.width, this.image.height]

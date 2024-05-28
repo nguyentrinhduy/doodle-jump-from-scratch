@@ -14,7 +14,11 @@ import { Direction, PlayerState } from '../player/PlayerState'
 import { EndScene } from './EndScene'
 import { ILand, Land, LandType } from '../land/ILand'
 import { Monster, MonsterType } from '../monster/Monster'
-import { BULLET_UP_VELOCITY, PLAYER_START_POSITION, PLAYER_START_VELOCITY } from '../constants/Player'
+import {
+    BULLET_UP_VELOCITY,
+    PLAYER_START_POSITION,
+    PLAYER_START_VELOCITY,
+} from '../constants/Player'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Bullet } from '../player/Bullet'
 import { SCORE_PLAYING_SCENE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
@@ -101,9 +105,9 @@ export class PlayingScene extends Scene {
         this.lands.forEach((element) => {
             element.display(cameraOffset)
         })
-        this.bullets.forEach(element => {
+        this.bullets.forEach((element) => {
             element.display(cameraOffset)
-        });
+        })
         this.player.display(cameraOffset)
         if (this.temporaryPlayer) {
             this.temporaryPlayer.display(cameraOffset)
@@ -126,13 +130,11 @@ export class PlayingScene extends Scene {
             this.context.transitionTo(new EndScene())
             return
         }
-        // console.log(this.player.velocity[1]);
         this.lands.forEach((element) => {
-            if (this.player.getVelocityY() > 0){
-                if (this.player.standOn(element)){
+            if (this.player.getVelocityY() > 0) {
+                if (this.player.standOn(element)) {
                     element.onJumped(this.player)
-                }
-                else if (this.temporaryPlayer && this.temporaryPlayer.standOn(element)) {
+                } else if (this.temporaryPlayer && this.temporaryPlayer.standOn(element)) {
                     element.onJumped(this.temporaryPlayer)
                     let position = this.player.getPosition()
                     this.player = this.temporaryPlayer.clone()
@@ -142,9 +144,9 @@ export class PlayingScene extends Scene {
             }
         })
         this.updateMap(deltaTime)
-        this.bullets.forEach(element => {
+        this.bullets.forEach((element) => {
             element.move(deltaTime)
-        });
+        })
         this.player.autoFall(deltaTime)
         this.score = Math.round(
             Math.max(this.score, PLAYER_START_POSITION[1] - this.player.getPositionY())
@@ -175,8 +177,8 @@ export class PlayingScene extends Scene {
     }
     private checkCollidesMonster() {
         // check if a bullet collides a monsters
-        for (let iMonster = 0; iMonster < this.monsters.length; iMonster ++) {
-            for (let iBullet = 0; iBullet < this.bullets.length; iBullet ++) {
+        for (let iMonster = 0; iMonster < this.monsters.length; iMonster++) {
+            for (let iBullet = 0; iBullet < this.bullets.length; iBullet++) {
                 if (this.monsters[iMonster].collides(this.bullets[iBullet])) {
                     this.monsters.splice(iMonster, 1)
                     this.bullets.splice(iBullet, 1)
@@ -184,7 +186,10 @@ export class PlayingScene extends Scene {
                 }
             }
             if (this.monsters[iMonster].collides(this.player)) {
-                if (this.player.standOn(this.monsters[iMonster]) && this.player.getVelocityY() > 0) {
+                if (
+                    this.player.standOn(this.monsters[iMonster]) &&
+                    this.player.getVelocityY() > 0
+                ) {
                     this.monsters.splice(iMonster, 1)
                     this.player.setVelocity([...PLAYER_START_VELOCITY])
                     if (this.temporaryPlayer) {
@@ -196,8 +201,7 @@ export class PlayingScene extends Scene {
                             this.temporaryPlayer.setState(PlayerState.Jump)
                         }
                     }
-                }
-                else {
+                } else {
                     this.player.setState(PlayerState.Lose)
                 }
                 return
@@ -209,13 +213,16 @@ export class PlayingScene extends Scene {
         while (this.lands.length > 0 && this.camera.isOutOfBottomRange(this.lands[0])) {
             this.lands.shift()
         }
-        while (this.monsters.length > 0 && (this.camera.isOutOfBottomRange(this.monsters[0])|| this.player.getBuff())) {
+        while (
+            this.monsters.length > 0 &&
+            (this.camera.isOutOfBottomRange(this.monsters[0]) || this.player.getBuff())
+        ) {
             this.monsters.shift()
         }
-        while(this.bullets.length > 0 && this.camera.isOutOfRange(this.bullets[0])) {
+        while (this.bullets.length > 0 && this.camera.isOutOfRange(this.bullets[0])) {
             this.bullets.shift()
         }
-        
+
         // add stuffs above the camera
         let mathHandler = MathHandler.getInstance()
         while (
@@ -343,18 +350,18 @@ export class PlayingScene extends Scene {
             this.player.setVelocityDirection(Direction.Right)
         }
 
-
-
         // key press
         // press w or press arrow up
         if (this.keyboardInput.keyPressed('w') || this.keyboardInput.keyPressed('ArrowUp')) {
-            if (this.player.getState() == PlayerState.Fall || this.player.getState() == PlayerState.Jump || this.player.getState() == PlayerState.ShootUp) {
-                this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]));
+            if (
+                this.player.getState() == PlayerState.Fall ||
+                this.player.getState() == PlayerState.Jump ||
+                this.player.getState() == PlayerState.ShootUp
+            ) {
+                this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]))
                 this.player.setState(PlayerState.ShootUp)
             }
         }
-
-
 
         // key up
         // release a or release arrow left
@@ -362,9 +369,11 @@ export class PlayingScene extends Scene {
             this.player.setVelocityX(0)
         }
         // release d or release arrow right
-        else if (this.keyboardInput.keyReleased('d') || this.keyboardInput.keyReleased('ArrowRight')) {
+        else if (
+            this.keyboardInput.keyReleased('d') ||
+            this.keyboardInput.keyReleased('ArrowRight')
+        ) {
             this.player.setVelocityX(0)
         }
-
     }
 }
