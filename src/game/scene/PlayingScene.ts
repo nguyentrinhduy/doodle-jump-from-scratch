@@ -48,13 +48,11 @@ export class PlayingScene extends Scene {
     private bulletReloadTime: number
     private lastStandableLandHeight: number
     private temporaryPlayer: Player | null
-    private shootAllowed: boolean
 
     constructor() {
         super()
         this.dataManager = DataManager.getInstance()
         this.loadResources()
-        this.shootAllowed = true
     }
     private loadResources() {
         // set null for temporary player
@@ -360,7 +358,7 @@ export class PlayingScene extends Scene {
             this.keyboardInput.keyReleased('w') ||
             this.keyboardInput.keyReleased('ArrowUp')
         ) {
-            this.shootAllowed = true
+            this.player.setShootAllowed(true)
         }
 
         // key down
@@ -379,9 +377,9 @@ export class PlayingScene extends Scene {
                 this.player.getState() == PlayerState.Jump ||
                 this.player.getState() == PlayerState.ShootUp
             ) {
-                if (this.shootAllowed){
+                if (this.player.getShootAllowed()){
                     this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]))
-                    this.shootAllowed = false
+                    this.player.setShootAllowed(false)
                 }
                 this.player.setState(PlayerState.ShootUp)
                 this.player.setSpecialStateTime(PLAYER_SHOOTING_TIME)

@@ -115,6 +115,11 @@ export class EndScene extends Scene {
     update(deltaTime: number): void {}
 
     render(): void {
+        const canvas = document.getElementById('game') as HTMLCanvasElement
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        }
         // display background
         this.background.display()
 

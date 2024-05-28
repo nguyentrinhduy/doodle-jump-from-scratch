@@ -30,6 +30,7 @@ export class Player extends ImageGameObject {
     private specialStateTime: number
     private buff: Buff | null
     private physicsHandler: PhysicsHandler
+    private shootAllowed: boolean
     constructor() {
         super(PlayerJumpLeftSprite)
         this.position = [...PLAYER_START_POSITION]
@@ -39,6 +40,7 @@ export class Player extends ImageGameObject {
         this.scaleSize(1.5)
         this.physicsHandler = new PhysicsHandler(this)
         this.physicsHandler.setVelocity([...PLAYER_START_VELOCITY_IN_PLAYING_SCENE])
+        this.shootAllowed = true
     }
     private resolveBuffPosition() {
         if (!this.buff) return
@@ -119,7 +121,12 @@ export class Player extends ImageGameObject {
     getState() {
         return this.state
     }
-
+    setShootAllowed(shootAllowed: boolean) {
+        this.shootAllowed = shootAllowed
+    }
+    getShootAllowed() {
+        return this.shootAllowed
+    }
     update(deltaTime: number) {
         this.autoFall(deltaTime)
     }
