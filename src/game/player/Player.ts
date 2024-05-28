@@ -136,7 +136,18 @@ export class Player extends ImageGameObject {
     getBuff() {
         return this.buff
     }
-
+    override setPositionX(x: number): void {
+        super.setPositionX(x)
+        this.resolveBuffPosition()
+    }
+    override setPosition(position: [number, number]): void {
+        super.setPosition(position)
+        this.resolveBuffPosition()
+    }
+    override setPositionY(y: number): void {
+        super.setPositionY(y)
+        this.resolveBuffPosition()
+    }
     setState(state: PlayerState, direction = this.direction) {
         this.state = state
         this.direction = direction
@@ -179,7 +190,6 @@ export class Player extends ImageGameObject {
             this.buff.display(cameraOffset)
         }
     }
-
     clone(): Player {
         let player = new Player()
         player.position = [...this.position]

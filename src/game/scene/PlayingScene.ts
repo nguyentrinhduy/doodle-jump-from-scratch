@@ -42,7 +42,6 @@ export class PlayingScene extends Scene {
     private camera: Camera
     private bulletReloadTime: number
     private lastStandableLandHeight: number
-
     private temporaryPlayer: Player | null
 
     constructor() {
@@ -129,24 +128,31 @@ export class PlayingScene extends Scene {
         }
         // console.log(this.player.velocity[1]);
         this.lands.forEach((element) => {
-            if (this.player.standOn(element) && this.player.getVelocityY() > 0) {
-                element.onJumped(this.player)
+            if (this.player.getVelocityY() > 0){
+                if (this.player.standOn(element)){
+                    element.onJumped(this.player)
+                }
+                else if (this.temporaryPlayer && this.temporaryPlayer.standOn(element)) {
+                    element.onJumped(this.temporaryPlayer)
+                    let position = this.player.getPosition()
+                    this.player = this.temporaryPlayer.clone()
+                    this.camera.focusOn(this.player)
+                    this.player.setPosition([...position])
+                }
             }
         })
         this.updateMap(deltaTime)
-        this.player.autoFall(deltaTime)
         this.bullets.forEach(element => {
             element.move(deltaTime)
         });
+        this.player.autoFall(deltaTime)
         this.score = Math.round(
             Math.max(this.score, PLAYER_START_POSITION[1] - this.player.getPositionY())
         )
         if (this.player.getPositionX() < 0) {
             if (this.player.getPositionX() + this.player.getWidth() > 0) {
-                if (!this.temporaryPlayer) {
-                    this.temporaryPlayer = this.player.clone()
-                    this.temporaryPlayer.setPositionX(this.player.getPositionX() + WINDOW_WIDTH)
-                }
+                this.temporaryPlayer = this.player.clone()
+                this.temporaryPlayer.setPositionX(this.player.getPositionX() + WINDOW_WIDTH)
             } else {
                 this.player = this.temporaryPlayer!
                 this.camera.focusOn(this.player)
@@ -154,10 +160,8 @@ export class PlayingScene extends Scene {
             }
         } else if (this.player.getPositionX() + this.player.getWidth() > WINDOW_WIDTH) {
             if (this.player.getPositionX() < WINDOW_WIDTH) {
-                if (!this.temporaryPlayer) {
-                    this.temporaryPlayer = this.player.clone()
-                    this.temporaryPlayer.setPositionX(this.player.getPositionX() - WINDOW_WIDTH)
-                }
+                this.temporaryPlayer = this.player.clone()
+                this.temporaryPlayer.setPositionX(this.player.getPositionX() - WINDOW_WIDTH)
             } else {
                 this.player = this.temporaryPlayer!
                 this.camera.focusOn(this.player)
@@ -165,9 +169,6 @@ export class PlayingScene extends Scene {
             }
         } else {
             this.temporaryPlayer = null
-        }
-        if (this.temporaryPlayer) {
-            this.temporaryPlayer.autoFall(deltaTime)
         }
         this.scoreObject.setText(this.score.toString())
         this.camera.update()
@@ -336,16 +337,10 @@ export class PlayingScene extends Scene {
         // press a or press arrow left
         if (this.keyboardInput.keyDown('a') || this.keyboardInput.keyDown('ArrowLeft')) {
             this.player.setVelocityDirection(Direction.Left)
-            if (this.temporaryPlayer) {
-                this.temporaryPlayer.setVelocityDirection(Direction.Left)
-            }
         }
         // press d or press arrow right
         else if (this.keyboardInput.keyDown('d') || this.keyboardInput.keyDown('ArrowRight')) {
             this.player.setVelocityDirection(Direction.Right)
-            if (this.temporaryPlayer) {
-                this.temporaryPlayer.setVelocityDirection(Direction.Right)
-            }
         }
 
 
@@ -356,9 +351,6 @@ export class PlayingScene extends Scene {
             if (this.player.getState() == PlayerState.Fall || this.player.getState() == PlayerState.Jump || this.player.getState() == PlayerState.ShootUp) {
                 this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]));
                 this.player.setState(PlayerState.ShootUp)
-                if (this.temporaryPlayer) [
-                    this.temporaryPlayer.setState(PlayerState.ShootUp)
-                ]
             }
         }
 
@@ -368,16 +360,10 @@ export class PlayingScene extends Scene {
         // release a or release arrow left
         if (this.keyboardInput.keyReleased('a') || this.keyboardInput.keyReleased('ArrowLeft')) {
             this.player.setVelocityX(0)
-            if (this.temporaryPlayer) {
-                this.temporaryPlayer.setVelocityX(0)
-            }
         }
         // release d or release arrow right
         else if (this.keyboardInput.keyReleased('d') || this.keyboardInput.keyReleased('ArrowRight')) {
             this.player.setVelocityX(0)
-            if (this.temporaryPlayer) {
-                this.temporaryPlayer.setVelocityX(0)
-            }
         }
 
     }

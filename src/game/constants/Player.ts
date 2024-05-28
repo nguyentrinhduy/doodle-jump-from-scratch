@@ -8,5 +8,5 @@ export const PLAYER_START_POSITION_IN_START_SCENE: readonly [number, number] = [
 export const PLAYER_START_VELOCITY_IN_PLAYING_SCENE: readonly [number, number] = [0, -1.5]
 export const GRAVITY_ACCELERATION: readonly [number, number] = [0, 0.0015]
 export const BULLET_UP_VELOCITY: readonly [number, number] = [0, -2]
-export const PLAYER_SHOOTING_TIME = 500
+export const PLAYER_SHOOTING_TIME = 300
 export const BULLET_INITIAL_POSITION: readonly [number, number] = [40, 30]
