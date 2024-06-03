@@ -120,31 +120,31 @@ export class EndScene extends Scene {
         if (ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
         }
-        // display background
-        this.background.display()
+        // render background
+        this.background.render()
 
-        // display top background
-        this.topBackground.display()
+        // render top background
+        this.topBackground.render()
 
-        // display bottom background
-        this.bottomBackground.display()
+        // render bottom background
+        this.bottomBackground.render()
 
-        // display game over background
-        this.gameOverBackground.display()
+        // render game over background
+        this.gameOverBackground.render()
 
-        // display play again button
-        this.playAgainButton.display()
+        // render play again button
+        this.playAgainButton.render()
 
-        // display menu button
-        this.menuButton.display()
+        // render menu button
+        this.menuButton.render()
 
-        // display score object
-        this.yourScoreObject.display()
+        // render score object
+        this.yourScoreObject.render()
 
-        // display high score object
-        this.yourHighScoreObject.display()
+        // render high score object
+        this.yourHighScoreObject.render()
 
-        // display name object
-        this.yourNameObject.display()
+        // render name object
+        this.yourNameObject.render()
     }
 }

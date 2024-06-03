@@ -22,7 +22,12 @@ import {
 } from '../constants/Player'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Bullet } from '../player/Bullet'
-import { DIFFICULTY_RATIO, SCORE_PLAYING_SCENE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH } from '../constants/Bounds'
+import {
+    DIFFICULTY_RATIO,
+    SCORE_PLAYING_SCENE_SIZE,
+    WINDOW_HEIGHT,
+    WINDOW_WIDTH,
+} from '../constants/Bounds'
 import { NormalLand } from '../land/NormalLand'
 import { LAND_HEIGHT, LAND_WIDTH } from '../constants/Land'
 import { MovingLand } from '../land/MovingLand'
@@ -105,23 +110,23 @@ export class PlayingScene extends Scene {
         if (!ctx) return
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         let cameraOffset = this.camera.getOffset()
-        this.background.display()
+        this.background.render()
         this.lands.forEach((element) => {
-            element.display(cameraOffset)
+            element.render(cameraOffset)
         })
         this.bullets.forEach((element) => {
-            element.display(cameraOffset)
+            element.render(cameraOffset)
         })
-        this.player.display(cameraOffset)
+        this.player.render(cameraOffset)
         if (this.temporaryPlayer) {
-            this.temporaryPlayer.display(cameraOffset)
+            this.temporaryPlayer.render(cameraOffset)
         }
         this.monsters.forEach((element) => {
-            element.display(cameraOffset)
+            element.render(cameraOffset)
         })
-        this.topBackground.display()
-        this.pauseButton.display()
-        this.scoreObject.display()
+        this.topBackground.render()
+        this.pauseButton.render()
+        this.scoreObject.render()
     }
     update(deltaTime: number): void {
         this.checkCollidesMonster()
@@ -306,7 +311,10 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 3000 + Math.min(800, this.difficulty),
+                            previousHeight -
+                                newMonster.getHeight() -
+                                3000 +
+                                Math.min(800, this.difficulty),
                             previousHeight - newMonster.getHeight() - 2000
                         ),
                     ])
@@ -318,7 +326,10 @@ export class PlayingScene extends Scene {
                     newMonster.setPosition([
                         mathHandler.getRandomFloat(0, WINDOW_WIDTH - newMonster.getWidth()),
                         mathHandler.getRandomFloat(
-                            previousHeight - newMonster.getHeight() - 3000 + Math.min(800, this.difficulty),
+                            previousHeight -
+                                newMonster.getHeight() -
+                                3000 +
+                                Math.min(800, this.difficulty),
                             previousHeight - newMonster.getHeight() - 2000
                         ),
                     ])
@@ -359,10 +370,7 @@ export class PlayingScene extends Scene {
             this.player.setVelocityX(0)
         }
         // release w or release arrow up
-        if (
-            this.keyboardInput.keyReleased('w') ||
-            this.keyboardInput.keyReleased('ArrowUp')
-        ) {
+        if (this.keyboardInput.keyReleased('w') || this.keyboardInput.keyReleased('ArrowUp')) {
             this.player.setShootAllowed(true)
         }
 
@@ -382,7 +390,7 @@ export class PlayingScene extends Scene {
                 this.player.getState() == PlayerState.Jump ||
                 this.player.getState() == PlayerState.ShootUp
             ) {
-                if (this.player.getShootAllowed()){
+                if (this.player.getShootAllowed()) {
                     this.bullets.push(this.player.shoot([...BULLET_UP_VELOCITY]))
                     this.player.setShootAllowed(false)
                 }

@@ -4,20 +4,20 @@ import { GameObject } from '../game-objects/GameObject'
 export class PhysicsHandler {
     private gravity_acceleration: [number, number]
     private velocity: [number, number]
-    private isAppliedPhysics: boolean
+    private isAppliedAcceleration: boolean
     private AppliedObject: GameObject | null
     constructor(object: GameObject) {
         this.AppliedObject = object
         this.gravity_acceleration = [...GRAVITY_ACCELERATION]
-        this.isAppliedPhysics = true
+        this.isAppliedAcceleration = true
     }
 
-    setEnable(isAppliedPhysics: boolean) {
-        this.isAppliedPhysics = isAppliedPhysics
+    setEnable(isAppliedAcceleration: boolean) {
+        this.isAppliedAcceleration = isAppliedAcceleration
     }
 
     isEnabled() {
-        return this.isAppliedPhysics
+        return this.isAppliedAcceleration
     }
 
     getVelocity() {
@@ -49,7 +49,7 @@ export class PhysicsHandler {
         let newPosition = this.AppliedObject.getPosition()
         newPosition[0] += this.velocity[0] * deltaTime
         newPosition[1] += this.velocity[1] * deltaTime
-        if (!this.isAppliedPhysics) return
+        if (!this.isAppliedAcceleration) return
         this.velocity[0] += this.gravity_acceleration[0] * deltaTime
         this.velocity[1] += this.gravity_acceleration[1] * deltaTime
     }
@@ -57,7 +57,7 @@ export class PhysicsHandler {
     clone(object: GameObject) {
         let newPhysicHandler = new PhysicsHandler(object)
         newPhysicHandler.velocity = [...this.velocity]
-        newPhysicHandler.isAppliedPhysics = this.isAppliedPhysics
+        newPhysicHandler.isAppliedAcceleration = this.isAppliedAcceleration
         return newPhysicHandler
     }
 }

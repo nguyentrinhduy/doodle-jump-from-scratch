@@ -80,16 +80,16 @@ export class StartScene extends Scene {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
             // draw Background
-            this.background.display()
+            this.background.render()
 
             // draw Land
-            this.land.display()
+            this.land.render()
 
             // draw Player
-            this.player.display()
+            this.player.render()
 
             // draw  PlayButton
-            this.playButton.display()
+            this.playButton.render()
         }
     }
 }

@@ -13,7 +13,7 @@ export class Sprite {
     getNaturalSize(): [number, number] {
         return [this.image.width, this.image.height]
     }
-    display(position: [number, number], size: [number, number]) {
+    render(position: [number, number], size: [number, number]) {
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas!.getContext('2d')
         if (ctx) {

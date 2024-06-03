@@ -81,5 +81,5 @@ export abstract class GameObject {
             other.containsPoint([this.position[0] + this.size[0], this.position[1] + this.size[1]])
         )
     }
-    abstract display(cameraOffset: [number, number]): void
+    abstract render(cameraOffset: [number, number]): void
 }

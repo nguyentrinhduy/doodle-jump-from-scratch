@@ -40,9 +40,9 @@ export class PauseScene extends Scene {
         this.resumeButton.setPosition([...RESUME_BUTTON_POSITION])
     }
     render(): void {
-        this.background.display()
-        this.topBackground.display()
-        this.resumeButton.display()
+        this.background.render()
+        this.topBackground.render()
+        this.resumeButton.render()
     }
 
     processInput(): void {

@@ -79,10 +79,10 @@ export class MovingLand extends ImageGameObject implements ILand {
             }
         }
     }
-    override display(cameraOffset?: [number, number]): void {
-        super.display(cameraOffset)
+    override render(cameraOffset?: [number, number]): void {
+        super.render(cameraOffset)
         if (this.buff) {
-            this.buff.display(cameraOffset)
+            this.buff.render(cameraOffset)
         }
     }
 }

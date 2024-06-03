@@ -17,7 +17,7 @@ export class TextGameObject extends GameObject {
         return this.text
     }
 
-    display(cameraOffset: [number, number] = [0, 0]): void {
+    render(cameraOffset: [number, number] = [0, 0]): void {
         if (!this.visible) return
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas.getContext('2d')

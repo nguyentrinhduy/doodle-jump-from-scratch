@@ -13,9 +13,9 @@ export class ImageGameObject extends GameObject {
     protected setSprite(spriteName: string[]) {
         this.sprite = SpriteFactory.getInstance().getSprite(spriteName)
     }
-    display(cameraOffset: [number, number] = [0, 0]) {
+    render(cameraOffset: [number, number] = [0, 0]) {
         if (!this.visible) return
-        this.sprite.display(
+        this.sprite.render(
             [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
             this.size
         )

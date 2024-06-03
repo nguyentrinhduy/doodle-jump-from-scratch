@@ -32,9 +32,9 @@ export class AnimationGameObject extends GameObject {
     timePassed(deltaTime: number) {
         this.animator.timePassed(deltaTime)
     }
-    display(cameraOffset: [number, number] = [0, 0]): void {
+    render(cameraOffset: [number, number] = [0, 0]): void {
         if (!this.visible) return
-        this.animator.display(
+        this.animator.render(
             [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
             this.size
         )

@@ -110,8 +110,8 @@ export class Player extends ImageGameObject {
     getVelocityY() {
         return this.physicsHandler.getVelocityY()
     }
-    applyGravity(isAppliedPhysics: boolean) {
-        this.physicsHandler.setEnable(isAppliedPhysics)
+    applyGravity(isAppliedGravity: boolean) {
+        this.physicsHandler.setEnable(isAppliedGravity)
     }
 
     getVelocity() {
@@ -197,12 +197,13 @@ export class Player extends ImageGameObject {
         }
     }
 
-    override display(cameraOffset: [number, number] = [0, 0]): void {
-        super.display(cameraOffset)
+    override render(cameraOffset: [number, number] = [0, 0]): void {
+        super.render(cameraOffset)
         if (this.buff) {
-            this.buff.display(cameraOffset)
+            this.buff.render(cameraOffset)
         }
     }
+
     clone(): Player {
         let player = new Player()
         player.position = [...this.position]

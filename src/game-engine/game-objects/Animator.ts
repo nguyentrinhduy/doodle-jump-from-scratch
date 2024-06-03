@@ -42,8 +42,8 @@ export class Animator {
     getNaturalSize() {
         return this.sprites[this.currentAnimation].getNaturalSize()
     }
-    display(position: [number, number], size: [number, number]) {
-        this.sprites[this.currentAnimation].display(position, size)
+    render(position: [number, number], size: [number, number]) {
+        this.sprites[this.currentAnimation].render(position, size)
     }
     clone() {
         let newAnimator = new Animator(this.sprites)
