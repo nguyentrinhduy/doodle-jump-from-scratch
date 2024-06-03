@@ -197,13 +197,6 @@ export class Player extends ImageGameObject {
         }
     }
 
-    override render(cameraOffset: [number, number] = [0, 0]): void {
-        super.render(cameraOffset)
-        if (this.buff) {
-            this.buff.render(cameraOffset)
-        }
-    }
-
     clone(): Player {
         let player = new Player()
         player.position = [...this.position]

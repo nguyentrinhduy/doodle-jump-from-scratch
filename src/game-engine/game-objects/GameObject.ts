@@ -2,84 +2,90 @@ import { Sprite } from '../resource-factory/Sprite'
 import { SpriteFactory } from '../resource-factory/SpriteFactory'
 import { Animator } from './Animator'
 import { Camera } from '../camera/Camera'
+import { Size } from './Size'
+import { Position } from './Position'
 
 export abstract class GameObject {
-    protected size: [number, number] // [width, height]
-    protected position: [number, number] // left top position of the rectangle
+    protected size: Size 
+    protected position: Position
     protected visible: boolean
-    constructor() {
+    public constructor() {
         this.visible = true
     }
-    setSize(size: [number, number]) {
+    public setSize(size: Size): void {
         this.size = size
     }
-    setWidth(width: number) {
-        this.size[1] = width
+    public setWidth(width: number): void {
+        this.size.setWidth(width)
     }
-    setHeight(height: number) {
-        this.size[1] = height
+    public setHeight(height: number): void {
+        this.size.setHeight(height)
     }
-    setPosition(position: [number, number]) {
+    public setPosition(position: Position): void {
         this.position = position
     }
-    setPositionX(x: number) {
-        this.position[0] = x
+    public setPositionX(x: number): void {
+        this.position.setX(x)
     }
-    setPositionY(y: number) {
-        this.position[1] = y
+    public setPositionY(y: number): void {
+        this.position.setY(y)
     }
-    scaleSize(scale: number) {
-        this.size[0] *= scale
-        this.size[1] *= scale
+    public scaleSize(scale: number): void {
+        let width = this.size.getWidth()
+        let height = this.size.getHeight()
+        width *= scale
+        height *= scale
+        this.size.setWidth(width)
+        this.size.setHeight(height)
     }
-    getSize() {
+    public getSize(): Size {
         return this.size
     }
-    getWidth() {
-        return this.size[0]
+    public getWidth(): number {
+        return this.size.getWidth()
     }
-    getHeight() {
-        return this.size[1]
+    public getHeight(): number {
+        return this.size.getHeight()
     }
-    getPosition() {
+    public getPosition() {
         return this.position
     }
-    getPositionX() {
-        return this.position[0]
+    public getPositionX(): number {
+        return this.position.getX()
     }
-    getPositionY() {
-        return this.position[1]
+    public getPositionY(): number {
+        return this.position.getY()
     }
-    isVisible() {
+    public isVisible(): boolean {
         return this.visible
     }
-    setVisible(visible: boolean) {
+    public setVisible(visible: boolean): void {
         this.visible = visible
     }
-    containsPoint(point: [number, number]) {
+    public containsPoint(point: Position): boolean {
         return (
-            this.position[0] <= point[0] &&
-            point[0] <= this.position[0] + this.size[0] &&
-            this.position[1] <= point[1] &&
-            point[1] <= this.position[1] + this.size[1]
+            this.position.getX() <= point.getX() &&
+            point.getX() <= this.position.getX() + this.size.getWidth() &&
+            this.position.getY() <= point.getY() &&
+            point.getY() <= this.position.getY() + this.size.getHeight()
         )
     }
-    collides(other: GameObject): boolean {
+    public collides(other: GameObject): boolean {
         return (
             this.containsPoint(other.position) ||
-            this.containsPoint([other.position[0], other.position[1] + other.size[1]]) ||
-            this.containsPoint([other.position[0] + other.size[0], other.position[1]]) ||
-            this.containsPoint([
-                other.position[0] + other.size[0],
-                other.position[1] + other.size[1],
-            ])
+            this.containsPoint(new Position(other.getPositionX(), other.getPositionX() + other.getHeight())) ||
+            this.containsPoint(new Position(other.getPositionX() + other.getWidth(), other.getPositionY())) ||
+            this.containsPoint(new Position(
+                other.getPositionX() + other.getWidth(),
+                other.getPositionY() + other.getHeight(),
+            ))
         )
     }
-    standOn(other: GameObject): boolean {
+    public standOn(other: GameObject): boolean {
         return (
-            other.containsPoint([this.position[0], this.position[1] + this.size[1]]) ||
-            other.containsPoint([this.position[0] + this.size[0], this.position[1] + this.size[1]])
+            other.containsPoint(new Position(this.getPositionX(), this.getPositionY() + this.getHeight())) ||
+            other.containsPoint(new Position(this.getPositionX() + this.getWidth(), this.getPositionY() + this.getHeight()))
         )
     }
-    abstract render(cameraOffset: [number, number]): void
+    abstract render(camera: Camera): void
 }

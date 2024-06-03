@@ -49,7 +49,6 @@ export class PlayingScene extends Scene {
     private lands: Land[]
     private monsters: Monster[]
     private bullets: Bullet[]
-    private camera: Camera
     private bulletReloadTime: number
     private lastStandableLandHeight: number
     private temporaryPlayer: Player | null

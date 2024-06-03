@@ -12,6 +12,7 @@ import { MathHandler } from '../../game-engine/math/MathHandler'
 import { Player } from '../player/Player'
 import { PlayerState } from '../player/PlayerState'
 import { ILand } from './ILand'
+import { Position } from '../../game-engine/game-objects/Position'
 
 export class MovingLand extends ImageGameObject implements ILand {
     private buff: Buff | null
@@ -23,10 +24,10 @@ export class MovingLand extends ImageGameObject implements ILand {
     }
     private setPositionForBuff() {
         let mathHandler = MathHandler.getInstance()
-        this.buff!.setPosition([
-            this.position[0] + mathHandler.getRandomFloat(0, this.size[0] - this.buff!.getWidth()),
-            this.position[1] - this.buff!.getHeight(),
-        ])
+        this.buff!.setPosition(new Position(
+            this.getPositionX() + mathHandler.getRandomFloat(0, this.getWidth() - this.buff!.getWidth()),
+            this.getPositionY() - this.buff!.getHeight(),
+        ))
     }
     randomizeBuff() {
         let mathHandler = MathHandler.getInstance()
@@ -53,9 +54,9 @@ export class MovingLand extends ImageGameObject implements ILand {
         }
     }
     move(deltaTime: number): void {
-        let buffPosition = [0, 0]
+        let buffPosition = new Position(0, 0)
         if (this.buff) buffPosition = this.buff.getPosition()
-        if (this.position[0] >= WINDOW_WIDTH - this.size[0]) {
+        if (this.getPositionX() >= WINDOW_WIDTH - this.getWidth()) {
             buffPosition[0] -= this.position[0] - (WINDOW_WIDTH - this.size[0])
             this.position[0] = WINDOW_WIDTH - this.size[0]
             this.velocity[0] = -this.velocity[0]
