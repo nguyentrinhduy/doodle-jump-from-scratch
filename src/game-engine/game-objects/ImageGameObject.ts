@@ -9,12 +9,12 @@ export class ImageGameObject extends GameObject {
     constructor(spriteName: string[]) {
         super()
         this.sprite = SpriteFactory.getInstance().getSprite(spriteName)
-        this.size = this.sprite.getNaturalSize()
+        this.size.set(this.sprite.getNaturalSize())
     }
     protected setSprite(spriteName: string[]) {
         this.sprite = SpriteFactory.getInstance().getSprite(spriteName)
     }
-    render(camera: Camera) {
+    render(camera: Camera = new Camera()) {
         if (!this.visible) return
         this.sprite.render(
             new Position(this.getPositionX() - camera.getOffsetX(), this.getPositionY() - camera.getOffsetY()),

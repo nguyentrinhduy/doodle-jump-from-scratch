@@ -1,5 +1,6 @@
 import { AnimationGameObject } from '../../game-engine/game-objects/AnimationGameObject'
 import { GameObject } from '../../game-engine/game-objects/GameObject'
+import { Position } from '../../game-engine/game-objects/Position'
 import { Player } from '../player/Player'
 import { PlayerState } from '../player/PlayerState'
 
@@ -9,7 +10,7 @@ export enum MonsterType {
     AlienMonster = 2,
 }
 export abstract class Monster extends AnimationGameObject {
-    protected abstract velocity: [number, number]
+    protected abstract velocity: Position
     constructor(spritesName: string[]) {
         super(spritesName)
         this.scaleSize(1.5)

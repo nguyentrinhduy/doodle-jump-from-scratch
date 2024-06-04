@@ -1,15 +1,16 @@
 import { Button } from '../game-objects/Button'
+import { Position } from '../game-objects/Position'
 
 export class MouseInput {
-    private mousePosition: [number, number]
+    private mousePosition: Position
     constructor() {
-        this.mousePosition = [-1, -1]
+        this.mousePosition = new Position(-1, -1)
         const canvas = document.getElementById('game')
         canvas!.addEventListener('click', this.mouseClickEventListener)
     }
     clicked(button: Button): boolean {
         if (button.containsPoint(this.mousePosition)) {
-            this.mousePosition = [-1, -1]
+            this.mousePosition = new Position(-1, -1)
             return true
         }
         return false
@@ -19,6 +20,7 @@ export class MouseInput {
         const rect = canvas.getBoundingClientRect()
         const mouseX = event.clientX - rect.left
         const mouseY = event.clientY - rect.top
-        this.mousePosition = [mouseX, mouseY]
+        this.mousePosition.setX(mouseX)
+        this.mousePosition.setY(mouseY)
     }
 }

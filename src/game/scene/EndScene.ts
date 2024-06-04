@@ -41,31 +41,34 @@ export class EndScene extends Scene {
     private playerName: string
     private score: number
     private highScore: number
+    private gameObjects: GameObject[]
     private dataManager: DataManager
     constructor() {
         super()
         this.dataManager = DataManager.getInstance()
+        this.gameObjects = []
         this.loadResources()
-
-        // TODO: replace these lines of code with the input handler
-        const canvas = document.getElementById('game') as HTMLCanvasElement
     }
     private loadResources() {
         // load background
         this.background = new ImageGameObject(BackgroundSprite)
-        this.background.setPosition([...BACKGROUND_POSITION])
+        this.background.setPosition(BACKGROUND_POSITION)
+        this.gameObjects.push(this.background)
 
         // load top background
         this.topBackground = new ImageGameObject(TopBackgroundSprite)
-        this.topBackground.setPosition([...TOP_BACKGROUND_POSITION])
+        this.topBackground.setPosition(TOP_BACKGROUND_POSITION)
+        this.gameObjects.push(this.topBackground)
 
         // load bottom background
         this.bottomBackground = new ImageGameObject(BottomBackgroundSprite)
-        this.bottomBackground.setPosition([...BOTTOM_BACKGROUND_POSITION])
+        this.bottomBackground.setPosition(BOTTOM_BACKGROUND_POSITION)
+        this.gameObjects.push(this.bottomBackground)
 
         // load game over background
         this.gameOverBackground = new ImageGameObject(GameOverSprite)
-        this.gameOverBackground.setPosition([...GAME_OVER_POSITION])
+        this.gameOverBackground.setPosition(GAME_OVER_POSITION)
+        this.gameObjects.push(this.gameOverBackground)
 
         // load score
         this.score = this.dataManager.getScore()
@@ -78,29 +81,42 @@ export class EndScene extends Scene {
 
         // load your score object
         this.yourScoreObject = new TextGameObject('YOUR SCORE: ' + this.score.toString())
-        this.yourScoreObject.setPosition([...YOUR_SCORE_POSITION])
+        this.yourScoreObject.setPosition(YOUR_SCORE_POSITION)
         this.yourScoreObject.setHeight(YOUR_SCORE_SIZE)
+        this.gameObjects.push(this.yourScoreObject)
 
         // load your high score object
 
         this.yourHighScoreObject = new TextGameObject(
             'YOUR HIGH SCORE: ' + this.highScore.toString()
         )
-        this.yourHighScoreObject.setPosition([...YOUR_HIGH_SCORE_POSITION])
+        this.yourHighScoreObject.setPosition(YOUR_HIGH_SCORE_POSITION)
         this.yourHighScoreObject.setHeight(YOUR_HIGH_SCORE_SIZE)
+        this.gameObjects.push(this.yourHighScoreObject)
 
         // load your name object
         this.yourNameObject = new TextGameObject('YOUR NAME: ' + this.playerName)
-        this.yourNameObject.setPosition([...YOUR_NAME_POSITION])
+        this.yourNameObject.setPosition(YOUR_NAME_POSITION)
         this.yourNameObject.setHeight(YOUR_NAME_SIZE)
+        this.gameObjects.push(this.yourNameObject)
 
         // load play again button
         this.playAgainButton = new Button(PlayAgainButtonSprite)
-        this.playAgainButton.setPosition([...PLAY_AGAIN_BUTTON_POSITION])
+        this.playAgainButton.setPosition(PLAY_AGAIN_BUTTON_POSITION)
+        this.gameObjects.push(this.playAgainButton)
 
         // load main menu button
         this.menuButton = new Button(MenuButtonSprite)
-        this.menuButton.setPosition([...MENU_BUTTON_POSITION])
+        this.menuButton.setPosition(MENU_BUTTON_POSITION)
+        this.gameObjects.push(this.menuButton)
+
+        // sort the game objects following the depths
+        this.gameObjects.sort((a, b) => {
+            if (a.getDepth() < b.getDepth()){
+                return 1
+            }
+            return 0
+        })
     }
 
     processInput(): void {
@@ -117,34 +133,10 @@ export class EndScene extends Scene {
     render(): void {
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas.getContext('2d')
-        if (ctx) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-        }
-        // render background
-        this.background.render()
-
-        // render top background
-        this.topBackground.render()
-
-        // render bottom background
-        this.bottomBackground.render()
-
-        // render game over background
-        this.gameOverBackground.render()
-
-        // render play again button
-        this.playAgainButton.render()
-
-        // render menu button
-        this.menuButton.render()
-
-        // render score object
-        this.yourScoreObject.render()
-
-        // render high score object
-        this.yourHighScoreObject.render()
-
-        // render name object
-        this.yourNameObject.render()
+        if (!ctx) { return }
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        this.gameObjects.forEach(element => {
+            element.render(this.camera)
+        });
     }
 }

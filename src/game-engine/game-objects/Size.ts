@@ -21,4 +21,9 @@ export class Size {
     public getHeight(): number {
         return this.height
     }
+
+    public set(size: Size) {
+        this.width = size.width
+        this.height = size.height
+    }
 }

@@ -1,4 +1,7 @@
 import { AnimationGameObject } from '../../game-engine/game-objects/AnimationGameObject'
+import { Position } from '../../game-engine/game-objects/Position'
+import { Buff } from '../buff/Buff'
+import { DUST_LAND_DEPTH } from '../constants/Depths'
 import {
     DUST_LAND_CRASHED_INDEX,
     DUST_LAND_FALL_VELOCITY,
@@ -9,20 +12,27 @@ import { Player } from '../player/Player'
 import { ILand } from './ILand'
 
 export class DustLand extends AnimationGameObject implements ILand {
-    private velocity: [number, number]
+    private velocity: Position
+    private buff: Buff | null
     constructor() {
         super(DustLandSprite)
-        this.velocity = [0, 0]
+        this.velocity = new Position(0, 0)
+        this.scaleSize(2)
+        this.buff = null
+        this.depth = DUST_LAND_DEPTH
+    }
+    public onJumped(player: Player): void {
+        this.requestMultipleAnimation(DUST_LAND_CRASHED_INDEX, DUST_LAND_TOTAL_ANIMATION - 1)
+        this.velocity.set(DUST_LAND_FALL_VELOCITY)
         this.scaleSize(2)
     }
-    onJumped(player: Player): void {
-        this.requestMultipleAnimation(DUST_LAND_CRASHED_INDEX, DUST_LAND_TOTAL_ANIMATION - 1)
-        this.velocity = [...DUST_LAND_FALL_VELOCITY]
+    public randomizeBuff(): Buff | null {
+        return this.buff
     }
-    randomizeBuff(): void {}
-    move(deltaTime: number): void {
-        this.position[0] += this.velocity[0] * deltaTime
-        this.position[1] += this.velocity[1] * deltaTime
-        this.timePassed(deltaTime)
+
+    public move(deltaTime: number): void {
+        this.position.setX(this.position.getX() + this.velocity.getX() * deltaTime)
+        this.position.setY(this.position.getY() + this.velocity.getY() * deltaTime)
+        this.update(deltaTime)
     }
 }

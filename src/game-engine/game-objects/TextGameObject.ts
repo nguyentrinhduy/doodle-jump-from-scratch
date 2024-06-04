@@ -1,4 +1,6 @@
+import { Camera } from '../camera/Camera'
 import { GameObject } from './GameObject'
+import { Size } from './Size'
 
 export class TextGameObject extends GameObject {
     private text: string
@@ -7,7 +9,7 @@ export class TextGameObject extends GameObject {
         super()
         this.text = text
         this.font = 'DoodleJump'
-        this.size = [0, 30]
+        this.size = new Size(0, 30)
     }
     setText(text: string) {
         this.text = text
@@ -17,13 +19,13 @@ export class TextGameObject extends GameObject {
         return this.text
     }
 
-    render(cameraOffset: [number, number] = [0, 0]): void {
+    render(camera: Camera = new Camera()): void {
         if (!this.visible) return
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas.getContext('2d')
         if (ctx) {
-            ctx.font = this.size[1].toString() + 'px ' + this.font
-            ctx.fillText(this.text, this.position[0], this.position[1])
+            ctx.font = this.size.getHeight().toString() + 'px ' + this.font
+            ctx.fillText(this.text, this.position.getX() - camera.getOffsetX(), this.position.getY() - camera.getOffsetY())
         }
     }
 }

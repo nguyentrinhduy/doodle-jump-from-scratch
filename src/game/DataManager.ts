@@ -1,4 +1,5 @@
 import { Camera } from '../game-engine/camera/Camera'
+import { Buff } from './buff/Buff'
 import { TOP_BOUND } from './constants/Bounds'
 import { ILand, Land, LandType } from './land/ILand'
 import { Monster } from './monster/Monster'
@@ -10,10 +11,11 @@ export class DataManager {
     private bullets: Bullet[]
     private lands: Land[]
     private monsters: Monster[]
+    private buffs: Buff[]
     private playerName: string
     private score: number
     private static instance: DataManager
-    private camera: Camera
+    private playerCamera: Camera
     private highScore: number
     private difficulty: number
     private constructor() {
@@ -23,12 +25,13 @@ export class DataManager {
 
     reset() {
         this.player = new Player()
-        this.camera = new Camera()
-        this.camera.focusOn(this.player)
-        this.camera.setTopBound(TOP_BOUND)
+        this.playerCamera = new Camera()
+        this.playerCamera.focusOn(this.player)
+        this.playerCamera.setTopBound(TOP_BOUND)
         this.lands = []
         this.bullets = []
         this.monsters = []
+        this.buffs = []
         this.playerName = 'Unknown Player'
         this.score = 0
         this.difficulty = 0
@@ -43,7 +46,7 @@ export class DataManager {
 
     setPlayer(player: Player) {
         this.player = player
-        this.camera.focusOn(this.player)
+        this.playerCamera.focusOn(this.player)
     }
     getPlayer() {
         return this.player
@@ -61,8 +64,12 @@ export class DataManager {
         return this.bullets
     }
 
-    getCamera() {
-        return this.camera
+    getBuffs() {
+        return this.buffs
+    }
+    
+    getPlayerCamera() {
+        return this.playerCamera
     }
 
     getScore() {

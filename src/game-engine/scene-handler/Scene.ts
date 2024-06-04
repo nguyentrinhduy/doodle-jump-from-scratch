@@ -11,6 +11,7 @@ export abstract class Scene {
     public constructor() {
         this.mouseInput = new MouseInput()
         this.keyboardInput = new KeyboardInput()
+        this.camera = new Camera()
     }
     public setContext(context: ISceneContext) {
         this.context = context

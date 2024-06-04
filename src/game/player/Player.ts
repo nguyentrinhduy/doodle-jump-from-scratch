@@ -11,7 +11,6 @@ import {
 } from '../constants/ResourcePath'
 import {
     BULLET_INITIAL_POSITION,
-    GRAVITY_ACCELERATION,
     PLAYER_SHOOTING_TIME,
     PLAYER_START_POSITION,
     PLAYER_START_VELOCITY,
@@ -23,6 +22,7 @@ import { Camera } from '../../game-engine/camera/Camera'
 import { ImageGameObject } from '../../game-engine/game-objects/ImageGameObject'
 import { Buff } from '../buff/Buff'
 import { PhysicsHandler } from '../../game-engine/physics/PhysicsHandler'
+import { Position } from '../../game-engine/game-objects/Position'
 
 export class Player extends ImageGameObject {
     private state: PlayerState
@@ -33,27 +33,27 @@ export class Player extends ImageGameObject {
     private shootAllowed: boolean
     constructor() {
         super(PlayerJumpLeftSprite)
-        this.position = [...PLAYER_START_POSITION]
+        this.position.set(PLAYER_START_POSITION)
         this.state = PlayerState.Jump
         this.direction = Direction.Left
         this.specialStateTime = 0
         this.scaleSize(1.5)
         this.physicsHandler = new PhysicsHandler(this)
-        this.physicsHandler.setVelocity([...PLAYER_START_VELOCITY_IN_PLAYING_SCENE])
+        this.physicsHandler.setVelocity(PLAYER_START_VELOCITY_IN_PLAYING_SCENE)
         this.shootAllowed = true
     }
     private resolveBuffPosition() {
         if (!this.buff) return
         if (this.state == PlayerState.WearingPropeller) {
-            this.buff.setPosition([this.position[0] + 15, this.position[1]])
+            this.buff.setPosition(new Position(this.getPositionX() + 15, this.getPositionY()))
         } else if (this.state == PlayerState.WearingJetpack) {
             if (this.direction == Direction.Left) {
-                this.buff.setPosition([this.position[0] + this.size[0] - 30, this.position[1] + 20])
+                this.buff.setPosition(new Position(this.getPositionX() + this.getWidth() - 30, this.getPositionY() + 20))
             } else {
-                this.buff.setPosition([
-                    this.position[0] - this.buff.getWidth() + 30,
-                    this.position[1] + 20,
-                ])
+                this.buff.setPosition(new Position(
+                    this.getPositionX() - this.buff.getWidth() + 30,
+                    this.getPositionY() + 20,
+                ))
             }
         }
     }
@@ -64,12 +64,13 @@ export class Player extends ImageGameObject {
             this.specialStateTime -= deltaTime
             if (this.specialStateTime <= 0) {
                 this.specialStateTime = 0
+                this.buff?.setVisible(false)
                 this.buff = null
                 this.setState(PlayerState.Jump)
                 this.physicsHandler.setEnable(true)
             } else {
                 if (this.buff) {
-                    this.buff!.timePassed(deltaTime)
+                    this.buff!.update(deltaTime)
                     this.resolveBuffPosition()
                 }
             }
@@ -94,7 +95,7 @@ export class Player extends ImageGameObject {
             }
         }
     }
-    setVelocity(velocity: [number, number]) {
+    setVelocity(velocity: Position) {
         this.physicsHandler.setVelocity(velocity)
     }
 
@@ -146,7 +147,7 @@ export class Player extends ImageGameObject {
         super.setPositionX(x)
         this.resolveBuffPosition()
     }
-    override setPosition(position: [number, number]): void {
+    override setPosition(position: Position): void {
         super.setPosition(position)
         this.resolveBuffPosition()
     }
@@ -177,31 +178,22 @@ export class Player extends ImageGameObject {
     setSpecialStateTime(time: number) {
         this.specialStateTime = time
     }
-    shoot(velocity: [number, number]) {
+    shoot(velocity: Position) {
         return new Bullet(
-            [
-                this.position[0] + BULLET_INITIAL_POSITION[0],
-                this.position[1] + BULLET_INITIAL_POSITION[1],
-            ],
+            new Position(
+                this.getPositionX() + BULLET_INITIAL_POSITION.getX(),
+                this.getPositionY() + BULLET_INITIAL_POSITION.getY(),
+            ),
             velocity
         )
     }
 
-    autoFallInStartScene(deltaTime: number) {
-        this.physicsHandler.update(deltaTime)
-
-        if (this.physicsHandler.getVelocityY() >= 0) {
-            if (this.state == PlayerState.Jump) {
-                this.setState(PlayerState.Fall)
-            }
-        }
-    }
-
     clone(): Player {
         let player = new Player()
-        player.position = [...this.position]
-        player.size = [...this.size]
+        player.setPosition(this.position)
+        player.setSize(this.size)
         player.visible = this.visible
+        player.depth = this.depth
         player.state = this.state
         player.direction = this.direction
         player.physicsHandler = this.physicsHandler.clone(player)

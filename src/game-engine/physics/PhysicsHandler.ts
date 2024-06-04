@@ -1,4 +1,4 @@
-import { GRAVITY_ACCELERATION } from '../../game/constants/Player'
+import { GRAVITY_ACCELERATION } from '../constant'
 import { GameObject } from '../game-objects/GameObject'
 import { Position } from '../game-objects/Position'
 
@@ -10,6 +10,7 @@ export class PhysicsHandler {
     public constructor(object: GameObject) {
         this.AppliedObject = object
         this.acceleration = GRAVITY_ACCELERATION
+        this.velocity = new Position(0, 0)
         this.isAppliedAcceleration = true
     }
 
@@ -26,7 +27,7 @@ export class PhysicsHandler {
     }
 
     public setVelocity(velocity: Position): void {
-        this.velocity = velocity
+        this.velocity.set(velocity)
     }
 
     public getVelocityX(): number {
@@ -60,7 +61,7 @@ export class PhysicsHandler {
 
     public clone(object: GameObject): PhysicsHandler {
         let newPhysicsHandler = new PhysicsHandler(object)
-        newPhysicsHandler.velocity = this.velocity
+        newPhysicsHandler.velocity.set(this.velocity)
         newPhysicsHandler.isAppliedAcceleration = this.isAppliedAcceleration
         return newPhysicsHandler
     }

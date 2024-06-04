@@ -28,16 +28,16 @@ export class PauseScene extends Scene {
     loadResources() {
         // load background
         this.background = new ImageGameObject(PauseBackgroundSprite)
-        this.background.setPosition([...BACKGROUND_POSITION])
+        this.background.setPosition(BACKGROUND_POSITION)
 
         // load topBackground
         this.topBackground = new ImageGameObject(TopBackgroundSprite)
-        this.topBackground.setPosition([...TOP_BACKGROUND_POSITION])
+        this.topBackground.setPosition(TOP_BACKGROUND_POSITION)
 
         // load resume button
         this.resumeButton = new Button(ResumeButtonSprite)
         this.resumeButton.scaleSize(1.2)
-        this.resumeButton.setPosition([...RESUME_BUTTON_POSITION])
+        this.resumeButton.setPosition(RESUME_BUTTON_POSITION)
     }
     render(): void {
         this.background.render()

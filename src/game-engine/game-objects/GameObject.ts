@@ -9,11 +9,15 @@ export abstract class GameObject {
     protected size: Size 
     protected position: Position
     protected visible: boolean
+    protected depth: number
     public constructor() {
+        this.size = new Size(0, 0)
+        this.position = new Position(0, 0)
         this.visible = true
+        this.depth = 0
     }
     public setSize(size: Size): void {
-        this.size = size
+        this.size.set(size)
     }
     public setWidth(width: number): void {
         this.size.setWidth(width)
@@ -22,7 +26,7 @@ export abstract class GameObject {
         this.size.setHeight(height)
     }
     public setPosition(position: Position): void {
-        this.position = position
+        this.position.set(position)
     }
     public setPositionX(x: number): void {
         this.position.setX(x)
@@ -61,6 +65,12 @@ export abstract class GameObject {
     }
     public setVisible(visible: boolean): void {
         this.visible = visible
+    }
+    public getDepth(): number {
+        return this.depth
+    }
+    public setDepth(depth: number) {
+        this.depth = depth
     }
     public containsPoint(point: Position): boolean {
         return (

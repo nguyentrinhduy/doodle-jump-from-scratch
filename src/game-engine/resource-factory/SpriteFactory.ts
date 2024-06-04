@@ -90,6 +90,16 @@ export class SpriteFactory {
         return SpriteFactory.instance
     }
 
+    public preloadSprites(): void {
+        for (const spritePath of INITIAL_SPRITES) {
+            this.getSprite(spritePath);
+        }
+
+        for (const [animationSpritePath] of INITIAL_ANIMATIONS) {
+            this.getAnimationSprite(animationSpritePath);
+        }
+    }
+
     private getKey(spriteName: string[]): string {
         return spriteName.join('_')
     }

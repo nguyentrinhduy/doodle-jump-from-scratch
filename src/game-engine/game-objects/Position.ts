@@ -21,4 +21,9 @@ export class Position {
     public getY(): number {
         return this.y
     }
+
+    public set(position: Position) {
+        this.x = position.x
+        this.y = position.y
+    }
 }

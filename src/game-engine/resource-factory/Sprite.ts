@@ -10,6 +10,7 @@ export class Sprite {
         resourcePath += filePath.join('/')
         resourcePath += '.png'
         this.image.src = resourcePath
+        console.log(resourcePath)
     }
     public getNaturalSize(): Size {
         return new Size(this.image.width, this.image.height)
@@ -18,7 +19,7 @@ export class Sprite {
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas!.getContext('2d')
         if (ctx) {
-            ctx.drawImage(this.image, position.getX(), position.getY(), size.getHeight(), size.getWidth())
+            ctx.drawImage(this.image, position.getX(), position.getY(), size.getWidth(), size.getHeight())
         }
     }
 }
