@@ -1,11 +1,12 @@
 import { Sprite } from '../resource-factory/Sprite'
+import { Position } from './Position'
+import { Size } from './Size'
 
 export class Animator {
     private currentAnimation: number
     private sprites: Sprite[]
     private timeDifference: number
     private animationTimeLeft: number
-    private timeDisplay: number
     private range: [number, number] | null
     constructor(sprites: Sprite[]) {
         this.range = null
@@ -17,17 +18,13 @@ export class Animator {
     setTimeDifference(time: number) {
         this.timeDifference = time
     }
-
-    setTimeDisplay(time: number) {
-        this.timeDisplay = time
-    }
     setRangeAnimation(range: [number, number] | null) {
         this.range = range
     }
     setCurrenAnimation(currentAnimation: number) {
         this.currentAnimation = currentAnimation
     }
-    timePassed(time: number) {
+    update(time: number) {
         if (this.range && this.currentAnimation == this.range[1]) return
         if (this.timeDifference == 0) return
         this.animationTimeLeft -= time
@@ -42,7 +39,7 @@ export class Animator {
     getNaturalSize() {
         return this.sprites[this.currentAnimation].getNaturalSize()
     }
-    render(position: [number, number], size: [number, number]) {
+    render(position: Position, size: Size) {
         this.sprites[this.currentAnimation].render(position, size)
     }
     clone() {
@@ -50,7 +47,6 @@ export class Animator {
         newAnimator.currentAnimation = this.currentAnimation
         newAnimator.timeDifference = this.timeDifference
         newAnimator.animationTimeLeft = this.animationTimeLeft
-        newAnimator.timeDisplay = this.timeDisplay
         if (this.range) {
             newAnimator.range = [...this.range]
         } else {

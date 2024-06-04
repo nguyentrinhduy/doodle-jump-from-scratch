@@ -16,6 +16,7 @@ import {
 } from '../constants/FixedPosition'
 import {
     PLAYER_START_POSITION_IN_START_SCENE,
+    PLAYER_START_VELOCITY,
     PLAYER_START_VELOCITY_IN_START_SCENE,
 } from '../constants/Player'
 import { WINDOW_HEIGHT } from '../constants/Bounds'
@@ -29,27 +30,54 @@ export class StartScene extends Scene {
     private scoreButton: Button
     private land: NormalLand
     private canvas: HTMLCanvasElement
+    private UIgameObjects: GameObject[]
+    private gameObjects: GameObject[]
     constructor() {
         super()
+        this.gameObjects = []
+        this.UIgameObjects = []
         this.loadResources()
     }
     private loadResources() {
         // load Background
         this.background = new ImageGameObject(MainMenuSprite)
         this.background.setHeight(WINDOW_HEIGHT)
-        this.background.setPosition([...BACKGROUND_POSITION])
+        this.background.setPosition(BACKGROUND_POSITION)
+        this.background.setDepth(1)
 
         // load Player
         this.player = new Player()
-        this.player.setPosition([...PLAYER_START_POSITION_IN_START_SCENE])
-        this.player.setVelocity([...PLAYER_START_VELOCITY_IN_START_SCENE])
+        this.player.setPosition(PLAYER_START_POSITION_IN_START_SCENE)
+        this.player.setVelocity(PLAYER_START_VELOCITY_IN_START_SCENE)
+        this.player.setDepth(2)
+
         // load PlayButton
         this.playButton = new Button(PlayButtonSprite)
-        this.playButton.setPosition([...PLAY_BUTTON_POSITION])
+        this.playButton.setPosition(PLAY_BUTTON_POSITION)
+        this.playButton.setDepth(4)
 
         // load Land
         this.land = new NormalLand()
-        this.land.setPosition([...LAND_POSITION_IN_START_SCENE])
+        this.land.setPosition(LAND_POSITION_IN_START_SCENE)
+        this.land.setDepth(3)
+
+        this.UIgameObjects.push(this.background)
+        this.UIgameObjects.push(this.playButton)
+        this.UIgameObjects.sort((a, b) => {
+            if (a.getDepth() < b.getDepth()) {
+                return 1
+            }
+            return 0
+        })
+        this.gameObjects.push(this.player)
+        this.gameObjects.push(this.land)
+        this.gameObjects.sort((a, b) => {
+            if (a.getDepth() < b.getDepth()) {
+                return 1
+            }
+            return 0
+        })
+        
     }
 
     processInput(): void {
@@ -64,7 +92,7 @@ export class StartScene extends Scene {
     }
 
     update(deltaTime: number): void {
-        this.player.autoFallInStartScene(deltaTime)
+        this.player.autoFall(deltaTime)
         if (this.player.standOn(this.land)) {
             if (this.player.getState() == PlayerState.Fall) {
                 this.land.onJumped(this.player)
@@ -78,18 +106,27 @@ export class StartScene extends Scene {
         if (ctx) {
             // clear the whole canvas first
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-            // draw Background
-            this.background.render()
-
-            // draw Land
-            this.land.render()
-
-            // draw Player
-            this.player.render()
-
-            // draw  PlayButton
-            this.playButton.render()
+            // this.background.render(this.camera)
+            let UIindex = 0
+            let gameIndex = 0
+            while (UIindex < this.UIgameObjects.length && gameIndex < this.gameObjects.length) {
+                if (this.UIgameObjects[UIindex].getDepth() <= this.gameObjects[gameIndex].getDepth()) {
+                    this.UIgameObjects[UIindex].render(this.camera)
+                    UIindex++
+                }
+                else {
+                    this.gameObjects[gameIndex].render(this.camera)
+                    gameIndex++
+                }
+            }
+            while(UIindex < this.UIgameObjects.length) {
+                this.UIgameObjects[UIindex].render(this.camera)
+                UIindex++
+            }
+            while(gameIndex < this.gameObjects.length) {
+                this.gameObjects[gameIndex].render(this.camera)
+                gameIndex++
+            }
         }
     }
 }

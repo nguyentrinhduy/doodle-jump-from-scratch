@@ -2,21 +2,22 @@ import { Sprite } from '../resource-factory/Sprite'
 import { SpriteFactory } from '../resource-factory/SpriteFactory'
 import { Camera } from '../camera/Camera'
 import { GameObject } from './GameObject'
+import { Position } from './Position'
 
 export class ImageGameObject extends GameObject {
     protected sprite: Sprite
     constructor(spriteName: string[]) {
         super()
         this.sprite = SpriteFactory.getInstance().getSprite(spriteName)
-        this.size = this.sprite.getNaturalSize()
+        this.size.set(this.sprite.getNaturalSize())
     }
     protected setSprite(spriteName: string[]) {
         this.sprite = SpriteFactory.getInstance().getSprite(spriteName)
     }
-    render(cameraOffset: [number, number] = [0, 0]) {
+    render(camera: Camera = new Camera()) {
         if (!this.visible) return
         this.sprite.render(
-            [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
+            new Position(this.getPositionX() - camera.getOffsetX(), this.getPositionY() - camera.getOffsetY()),
             this.size
         )
     }

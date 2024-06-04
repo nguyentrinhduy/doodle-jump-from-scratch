@@ -3,15 +3,14 @@ import { Camera } from '../camera/Camera'
 import { GameObject } from './GameObject'
 import { TIME_DIFFERENCE_ANIMATION } from '../constant'
 import { SpriteFactory } from '../resource-factory/SpriteFactory'
+import { Position } from './Position'
 
 export class AnimationGameObject extends GameObject {
     private animator: Animator
-    private spritesName: string[]
     constructor(spritesName: string[]) {
         super()
-        this.spritesName = [...spritesName]
         this.animator = new Animator(SpriteFactory.getInstance().getAnimationSprite(spritesName))
-        this.size = this.animator.getNaturalSize()
+        this.size.set(this.animator.getNaturalSize())
     }
     requestLoopAnimation() {
         this.animator.setRangeAnimation(null)
@@ -22,20 +21,23 @@ export class AnimationGameObject extends GameObject {
         this.animator.setTimeDifference(0)
         this.animator.setCurrenAnimation(target)
         this.animator.setRangeAnimation(null)
-        this.size = this.animator.getNaturalSize()
+        this.size.set(this.animator.getNaturalSize())
     }
     requestMultipleAnimation(from: number, to: number) {
         this.animator.setCurrenAnimation(from)
         this.animator.setRangeAnimation([from, to])
-        this.animator.setTimeDifference(TIME_DIFFERENCE_ANIMATION)
+        this.size.set(this.animator.getNaturalSize())
     }
-    timePassed(deltaTime: number) {
-        this.animator.timePassed(deltaTime)
+    update(deltaTime: number) {
+        this.animator.update(deltaTime)
     }
-    render(cameraOffset: [number, number] = [0, 0]): void {
+    render(camera: Camera = new Camera()): void {
         if (!this.visible) return
         this.animator.render(
-            [this.position[0] - cameraOffset[0], this.position[1] - cameraOffset[1]],
+            new Position(
+                this.getPositionX() - camera.getOffsetX(),
+                this.getPositionY() - camera.getOffsetY()
+            ),
             this.size
         )
     }

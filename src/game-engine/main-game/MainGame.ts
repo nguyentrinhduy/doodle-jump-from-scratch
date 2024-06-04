@@ -6,12 +6,15 @@ export class MainGame implements ISceneContext {
     private spriteFactory: SpriteFactory
     private lastTime: number
     private currentScene: Scene
+    private lastDeltaTime: number
     transitionTo(newScene: Scene): void {
         this.currentScene = newScene
         this.currentScene.setContext(this)
+        this.lastDeltaTime = Infinity
     }
     constructor() {
         this.spriteFactory = SpriteFactory.getInstance()
+        this.spriteFactory.preloadSprites()
         this.loop = this.loop.bind(this)
     }
     run() {
@@ -22,7 +25,10 @@ export class MainGame implements ISceneContext {
         let currentTime = window.performance.now()
         let deltaTime = currentTime - this.lastTime
         this.currentScene.processInput()
-        this.currentScene.update(deltaTime)
+        while(this.lastDeltaTime > deltaTime){
+            this.currentScene.update(deltaTime)
+            this.lastDeltaTime -= deltaTime
+        }
         this.currentScene.render()
         this.lastTime = currentTime
         requestAnimationFrame(this.loop)

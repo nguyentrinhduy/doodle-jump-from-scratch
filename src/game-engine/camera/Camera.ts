@@ -1,9 +1,11 @@
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../game/constants/Bounds'
 import { GameObject } from '../game-objects/GameObject'
+import { Position } from '../game-objects/Position'
+import { Size } from '../game-objects/Size'
 
 export class Camera {
-    private offset: [number, number] // locate at the left top
-    private size: [number, number]
+    private offset: Position  // locate at the left top
+    private size: Size
     private focusedObject: GameObject | null
 
     // bounds for when the focused object exceeds the bound, the camera itself will follow
@@ -11,9 +13,9 @@ export class Camera {
     private bottomBound: number
     private leftBound: number
     private rightBound: number
-    constructor() {
-        this.offset = [0, 0]
-        this.size = [WINDOW_WIDTH, WINDOW_HEIGHT]
+    public constructor() {
+        this.offset = new Position(0, 0)
+        this.size = new Size(WINDOW_WIDTH, WINDOW_HEIGHT)
         this.focusedObject = null
         this.topBound = -Infinity
         this.bottomBound = Infinity
@@ -21,7 +23,7 @@ export class Camera {
         this.rightBound = Infinity
     }
 
-    isOutOfRange(object: GameObject) {
+    public isOutOfRange(object: GameObject): boolean {
         return (
             this.isOutOfTopRange(object) &&
             this.isOutOfBottomRange(object) &&
@@ -30,93 +32,87 @@ export class Camera {
         )
     }
 
-    isOutOfTopRange(object: GameObject) {
-        let objectPosition = object.getPosition()
-        let objectSize = object.getSize()
-        return objectPosition[1] + objectSize[1] < this.offset[1]
+    public isOutOfTopRange(object: GameObject): boolean {
+        return object.getPositionY() + object.getHeight() < this.offset.getY()
     }
 
-    isOutOfBottomRange(object: GameObject) {
-        let objectPosition = object.getPosition()
-        return objectPosition[1] > this.offset[1] + this.size[1]
+    public isOutOfBottomRange(object: GameObject): boolean {
+        return object.getPositionY() > this.offset.getY() + this.size.getHeight()
     }
 
-    isOutOfLeftRange(object: GameObject) {
-        let objectPosition = object.getPosition()
-        let objectSize = object.getSize()
-        return objectPosition[0] + objectSize[0] < this.offset[0]
+    public isOutOfLeftRange(object: GameObject): boolean {
+        return object.getPositionX() + object.getWidth() < this.offset.getX()
     }
 
-    isOutOfRightRange(object: GameObject) {
-        let objectPosition = object.getPosition()
-        return objectPosition[0] > this.offset[0] + this.size[0]
+    public isOutOfRightRange(object: GameObject): boolean {
+        return object.getPositionX() > this.offset.getX() + this.size.getWidth()
     }
 
-    update() {
+    public update(): void {
         if (!this.focusedObject) return
 
         // handle for topBound
-        if (this.focusedObject.getPositionY() <= this.offset[1] + this.topBound) {
-            this.offset[1] = this.focusedObject.getPositionY() - this.topBound
+        if (this.focusedObject.getPositionY() <= this.offset.getY() + this.topBound) {
+            this.offset.setY(this.focusedObject.getPositionY() - this.topBound)
         }
 
         // handle for bottomBound
-        if (this.focusedObject.getPositionY() >= this.offset[1] + this.bottomBound) {
-            this.offset[1] = this.focusedObject.getPositionY() - this.bottomBound
+        if (this.focusedObject.getPositionY() >= this.offset.getY() + this.bottomBound) {
+            this.offset.setY(this.focusedObject.getPositionY() - this.bottomBound)
         }
 
         // handle for leftBound
-        if (this.focusedObject.getPositionX() <= this.offset[0] + this.leftBound) {
-            this.offset[0] = this.focusedObject.getPositionX() - this.leftBound
+        if (this.focusedObject.getPositionX() <= this.offset.getX() + this.leftBound) {
+            this.offset.setX(this.focusedObject.getPositionX() - this.leftBound)
         }
 
         // handle for rightBound
-        if (this.focusedObject.getPositionX() >= this.offset[0] + this.rightBound) {
-            this.offset[0] = this.focusedObject.getPositionX() - this.rightBound
+        if (this.focusedObject.getPositionX() >= this.offset.getX() + this.rightBound) {
+            this.offset.setX(this.focusedObject.getPositionX() - this.rightBound)
         }
     }
 
-    setTopBound(topBound: number) {
+    public setTopBound(topBound: number): void {
         this.topBound = topBound
     }
 
-    setBottomBound(bottomBound: number) {
+    public setBottomBound(bottomBound: number): void {
         this.bottomBound = bottomBound
     }
 
-    setLeftBound(leftBound: number) {
+    public setLeftBound(leftBound: number): void {
         this.leftBound = leftBound
     }
 
-    setRightBound(rightBound: number) {
+    public setRightBound(rightBound: number): void {
         this.rightBound = rightBound
     }
 
-    focusOn(object: GameObject) {
+    public focusOn(object: GameObject): void {
         this.focusedObject = object
     }
 
-    getOffset() {
+    public getOffset(): Position{
         return this.offset
     }
 
-    getOffsetX() {
-        return this.offset[0]
+    public getOffsetX(): number {
+        return this.offset.getX()
     }
 
-    getOffsetY() {
-        return this.offset[1]
+    public getOffsetY(): number {
+        return this.offset.getY()
     }
 
-    setOffsetX(x: number) {
-        this.offset[0] = x
+    public setOffsetX(x: number): void {
+        this.offset.setX(x)
     }
 
-    setOffsetY(y: number) {
-        this.offset[1] = y
+    public setOffsetY(y: number): void {
+        this.offset.setY(y)
     }
 
-    setOffset(offset: [number, number]) {
+    public setOffset(offset: Position): void {
         this.offset = offset
     }
 }

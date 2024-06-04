@@ -1,63 +1,68 @@
-import { GRAVITY_ACCELERATION } from '../../game/constants/Player'
+import { GRAVITY_ACCELERATION } from '../constant'
 import { GameObject } from '../game-objects/GameObject'
+import { Position } from '../game-objects/Position'
 
 export class PhysicsHandler {
-    private gravity_acceleration: [number, number]
-    private velocity: [number, number]
+    private acceleration: Position
+    private velocity: Position
     private isAppliedAcceleration: boolean
     private AppliedObject: GameObject | null
-    constructor(object: GameObject) {
+    public constructor(object: GameObject) {
         this.AppliedObject = object
-        this.gravity_acceleration = [...GRAVITY_ACCELERATION]
+        this.acceleration = GRAVITY_ACCELERATION
+        this.velocity = new Position(0, 0)
         this.isAppliedAcceleration = true
     }
 
-    setEnable(isAppliedAcceleration: boolean) {
+    public setEnable(isAppliedAcceleration: boolean): void {
         this.isAppliedAcceleration = isAppliedAcceleration
     }
 
-    isEnabled() {
+    public isEnabled(): boolean {
         return this.isAppliedAcceleration
     }
 
-    getVelocity() {
+    public getVelocity(): Position {
         return this.velocity
     }
 
-    setVelocity(velocity: [number, number]) {
-        this.velocity = velocity
+    public setVelocity(velocity: Position): void {
+        this.velocity.set(velocity)
     }
 
-    getVelocityX() {
-        return this.velocity[0]
+    public getVelocityX(): number {
+        return this.velocity.getX()
     }
 
-    setVelocityX(x: number) {
-        this.velocity[0] = x
+    public setVelocityX(x: number): void {
+        this.velocity.setX(x)
     }
 
-    getVelocityY() {
-        return this.velocity[1]
+    public getVelocityY(): number {
+        return this.velocity.getY()
     }
 
-    setVelocityY(y: number) {
-        this.velocity[1] = y
+    public setVelocityY(y: number): void {
+        this.velocity.setY(y)
     }
 
-    update(deltaTime: number) {
+    public update(deltaTime: number): void {
         if (!this.AppliedObject) return
-        let newPosition = this.AppliedObject.getPosition()
-        newPosition[0] += this.velocity[0] * deltaTime
-        newPosition[1] += this.velocity[1] * deltaTime
+        let newPositionX = this.AppliedObject.getPositionX()
+        let newPositionY = this.AppliedObject.getPositionY()
+        this.AppliedObject.setPositionX(newPositionX + this.velocity.getX() * deltaTime)
+        this.AppliedObject.setPositionY(newPositionY + this.velocity.getY() * deltaTime)
         if (!this.isAppliedAcceleration) return
-        this.velocity[0] += this.gravity_acceleration[0] * deltaTime
-        this.velocity[1] += this.gravity_acceleration[1] * deltaTime
+        let newVelocityX = this.velocity.getX()
+        let newVelocityY = this.velocity.getY()
+        this.velocity.setX(newVelocityX + this.acceleration.getX() * deltaTime)
+        this.velocity.setY(newVelocityY + this.acceleration.getY() * deltaTime)
     }
 
-    clone(object: GameObject) {
-        let newPhysicHandler = new PhysicsHandler(object)
-        newPhysicHandler.velocity = [...this.velocity]
-        newPhysicHandler.isAppliedAcceleration = this.isAppliedAcceleration
-        return newPhysicHandler
+    public clone(object: GameObject): PhysicsHandler {
+        let newPhysicsHandler = new PhysicsHandler(object)
+        newPhysicsHandler.velocity.set(this.velocity)
+        newPhysicsHandler.isAppliedAcceleration = this.isAppliedAcceleration
+        return newPhysicsHandler
     }
 }

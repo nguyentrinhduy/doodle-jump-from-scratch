@@ -83,24 +83,34 @@ export class SpriteFactory {
             this.animationSprites[this.getKey(spriteInfo[0])] = sprites
         }
     }
-    public static getInstance() {
+    public static getInstance(): SpriteFactory {
         if (!SpriteFactory.instance) {
             SpriteFactory.instance = new SpriteFactory()
         }
         return SpriteFactory.instance
     }
 
+    public preloadSprites(): void {
+        for (const spritePath of INITIAL_SPRITES) {
+            this.getSprite(spritePath);
+        }
+
+        for (const [animationSpritePath] of INITIAL_ANIMATIONS) {
+            this.getAnimationSprite(animationSpritePath);
+        }
+    }
+
     private getKey(spriteName: string[]): string {
         return spriteName.join('_')
     }
-    getSprite(spriteName: string[]): Sprite {
+    public getSprite(spriteName: string[]): Sprite {
         const key = this.getKey(spriteName)
         if (!(key in this.Sprites)) {
             this.Sprites[key] = new Sprite(spriteName)
         }
         return this.Sprites[key]
     }
-    getAnimationSprite(spritesName: string[]): Sprite[] {
+    public getAnimationSprite(spritesName: string[]): Sprite[] {
         const key = this.getKey(spritesName)
         if (!(key in this.animationSprites)) {
             throw new Error('The desired animation sprite does not exist')

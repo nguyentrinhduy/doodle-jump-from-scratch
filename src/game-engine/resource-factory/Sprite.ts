@@ -1,23 +1,25 @@
+import { Position } from "../game-objects/Position"
+import { Size } from "../game-objects/Size"
+
 export class Sprite {
     private image: HTMLImageElement
-    private loaded: boolean
 
-    constructor(filePath: string[]) {
-        this.loaded = false
+    public constructor(filePath: string[]) {
         this.image = new Image()
         let resourcePath = './assets/Images/'
         resourcePath += filePath.join('/')
         resourcePath += '.png'
         this.image.src = resourcePath
+        console.log(resourcePath)
     }
-    getNaturalSize(): [number, number] {
-        return [this.image.width, this.image.height]
+    public getNaturalSize(): Size {
+        return new Size(this.image.width, this.image.height)
     }
-    render(position: [number, number], size: [number, number]) {
+    public render(position: Position, size: Size): void {
         const canvas = document.getElementById('game') as HTMLCanvasElement
         const ctx = canvas!.getContext('2d')
         if (ctx) {
-            ctx.drawImage(this.image, position[0], position[1], size[0], size[1])
+            ctx.drawImage(this.image, position.getX(), position.getY(), size.getWidth(), size.getHeight())
         }
     }
 }
